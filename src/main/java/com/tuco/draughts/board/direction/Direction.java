@@ -54,4 +54,9 @@ public class Direction {
         directions.add(new Direction(HorizontalDirection.LEFT, verticalDirection));
         return directions;
     }
+
+    @Override
+    public String toString() {
+        return "(" + horizontalDirection + ", " + verticalDirection + ')';
+    }
 }

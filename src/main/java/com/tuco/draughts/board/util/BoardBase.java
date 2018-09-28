@@ -27,11 +27,23 @@ public class BoardBase {
     }
 
     public Chequer getChequer(Coordinate coordinate) {
+        if (isOutOfBounds(coordinate)) {
+            return Chequer.DISABLED;
+        }
         return gameBoard[coordinate.getColumn()][coordinate.getRow()];
     }
 
     public void setChequer(Coordinate coordinate, Chequer chequer) {
+        if (isOutOfBounds(coordinate)) {
+            return;
+        }
         gameBoard[coordinate.getColumn()][coordinate.getRow()] = chequer;
+    }
+
+    private boolean isOutOfBounds(Coordinate coordinate) {
+        if (coordinate.getRow() < 0 || coordinate.getRow() >= boardSize) {
+            return true;
+        } else return coordinate.getColumn() < 0 && coordinate.getColumn() >= boardSize;
     }
 
     @Override

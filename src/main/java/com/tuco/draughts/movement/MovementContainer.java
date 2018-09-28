@@ -1,12 +1,12 @@
 package com.tuco.draughts.movement;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class MovementContainer {
     private List<Movement> movements;
-
-    private int power;
 
     public MovementContainer() {
         movements = new ArrayList<>();
@@ -17,29 +17,27 @@ public class MovementContainer {
     }
 
     public void insertMovements(MovementContainer prospectiveMoves) {
-        if (prospectiveMoves.power > this.power) {
+        if (prospectiveMoves.getPower() > this.getPower()) {
             setMovements(prospectiveMoves);
-        } else if (prospectiveMoves.power == this.power) {
+        } else if (prospectiveMoves.getPower() == this.getPower()) {
             addMovements(prospectiveMoves);
         }
     }
 
     private void setMovements(MovementContainer movementContainer) {
         this.movements = new ArrayList<>(movementContainer.movements);
-        this.power = movementContainer.power;
     }
 
     private void addMovements(MovementContainer movementContainer) {
         this.movements.addAll(movementContainer.movements);
     }
 
-    public MovementContainer insertMovement(Movement movement) {
-        if (movement.getPower() > this.power) {
+    public void insertMovement(Movement movement) {
+        if (movement.getPower() > this.getPower()) {
             setMovement(movement);
-        } else if (movement.getPower() == this.power) {
+        } else if (movement.getPower() == this.getPower()) {
             addMovement(movement);
         }
-        return this;
     }
 
     private void setMovement(Movement movement) {
@@ -49,5 +47,11 @@ public class MovementContainer {
 
     private void addMovement(Movement movement) {
         movements.add(movement);
+    }
+
+    public int getPower() {
+        Optional<Movement> movement = movements.stream()
+                .max(Comparator.comparing(Movement::getPower));
+        return movement.map(Movement::getPower).orElse(0);
     }
 }

@@ -27,14 +27,9 @@ public class Coordinate {
         this.row = row;
     }
 
-    public Coordinate(Coordinate coordinate) {
-        this.column = this.getColumn();
-        this.row = this.getRow();
-    }
-
     public Coordinate plus(Direction direction) {
-        this.column += direction.getHorizontalDirection().getValue();
-        this.row += direction.getVerticalDirection().getValue();
-        return this;
+        int newColumn = column + direction.getHorizontalDirection().getValue();
+        int newRow = row + direction.getVerticalDirection().getValue();
+        return new Coordinate(newColumn, newRow);
     }
 }

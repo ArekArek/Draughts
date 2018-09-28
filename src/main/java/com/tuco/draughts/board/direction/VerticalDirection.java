@@ -12,8 +12,4 @@ public enum VerticalDirection {
     public int getValue() {
         return value;
     }
-
-    public static VerticalDirection fromMaximizingTurn(boolean isMaximizingTurnNow) {
-        return isMaximizingTurnNow ? UP : DOWN;
-    }
 }

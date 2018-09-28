@@ -12,7 +12,6 @@ public enum Chequer {
     private static final Set<Chequer> WHITE_SET = new HashSet<>(Arrays.asList(Chequer.WHITE, Chequer.WHITE_KING));
     private static final Set<Chequer> BLACK_SET = new HashSet<>(Arrays.asList(Chequer.BLACK, Chequer.BLACK_KING));
     private static final Set<Chequer> KING_SET = new HashSet<>(Arrays.asList(Chequer.WHITE_KING, Chequer.BLACK_KING));
-    private static final Set<Chequer> UNAVAILABLE_SET = new HashSet<>(Arrays.asList(Chequer.DISABLED, Chequer.EMPTY));
 
     Chequer(int value) {
         this.value = value;
@@ -41,12 +40,8 @@ public enum Chequer {
         }
     }
 
-    public boolean isEnemy(boolean isMaximizingTurnNow) {
-        return isMaximizingTurnNow && BLACK_SET.contains(this) || !isMaximizingTurnNow && WHITE_SET.contains(this);
-    }
-
-    public boolean isFriendly(boolean isMaximizingTurnNow) {
-        return !isEnemy(isMaximizingTurnNow) && !UNAVAILABLE_SET.contains(this);
+    public boolean isEnemy(boolean isWhiteTurn) {
+        return (isWhiteTurn && BLACK_SET.contains(this)) || (!isWhiteTurn && WHITE_SET.contains(this));
     }
 
     public boolean isKing() {

@@ -18,9 +18,22 @@ public class Movement {
         addStep(startPosition);
     }
 
+    public Movement(Movement parent) {
+        this.steps = new ArrayList<>(parent.steps);
+        this.finished = parent.finished;
+    }
+
     public Movement addStep(Coordinate coordinate) {
         steps.add(coordinate);
         return this;
+    }
+
+    public Coordinate getLastStep() {
+        return steps.get(steps.size() - 1);
+    }
+
+    public boolean wasVisited(Coordinate coordinate) {
+        return steps.contains(coordinate);
     }
 
     public Movement finish() {
@@ -29,6 +42,6 @@ public class Movement {
     }
 
     public int getPower() {
-        return steps.size();
+        return steps.size() - 1;
     }
 }
