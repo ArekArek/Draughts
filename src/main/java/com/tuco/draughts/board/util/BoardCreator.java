@@ -1,10 +1,10 @@
 package com.tuco.draughts.board.util;
 
-import com.tuco.draughts.board.Place;
+import com.tuco.draughts.board.Chequer;
 
 public interface BoardCreator {
 
-    Place[][] createBoard();
+    Chequer[][] createBoard();
 
     int getBoardSize();
 }

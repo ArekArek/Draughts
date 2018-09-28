@@ -1,6 +1,6 @@
 package com.tuco.draughts.board.util;
 
-import com.tuco.draughts.board.Place;
+import com.tuco.draughts.board.Chequer;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -8,14 +8,14 @@ public class BoardBase {
 
     protected final int boardSize;
 
-    protected Place[][] gameBoard;
+    protected Chequer[][] gameBoard;
 
-    public BoardBase(BoardCreator boardCreator) {
+    protected BoardBase(BoardCreator boardCreator) {
         gameBoard = boardCreator.createBoard();
         boardSize = boardCreator.getBoardSize();
     }
 
-    public BoardBase(BoardBase boardBase) {
+    protected BoardBase(BoardBase boardBase) {
         boardSize = boardBase.boardSize;
         createClonedBoard(boardBase);
     }
@@ -26,20 +26,12 @@ public class BoardBase {
         }
     }
 
-    public Place getPlace(Coordinates coordinates) {
-        return getPlace(coordinates.getColumn(), coordinates.getRow());
+    public Chequer getChequer(Coordinate coordinate) {
+        return gameBoard[coordinate.getColumn()][coordinate.getRow()];
     }
 
-    public Place getPlace(int column, int row) {
-        return gameBoard[column][row];
-    }
-
-    public void setPlace(Coordinates coordinates, Place place) {
-        setPlace(coordinates.getColumn(), coordinates.getRow(), place);
-    }
-
-    public void setPlace(int x, int y, Place place) {
-        gameBoard[x][y] = place;
+    public void setChequer(Coordinate coordinate, Chequer chequer) {
+        gameBoard[coordinate.getColumn()][coordinate.getRow()] = chequer;
     }
 
     @Override

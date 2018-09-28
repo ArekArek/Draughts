@@ -4,17 +4,17 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum Place {
+public enum Chequer {
     WHITE(1), WHITE_KING(5), BLACK(-1), BLACK_KING(-5), EMPTY(0), DISABLED(0);
 
     private final int value;
 
-    private static final Set<Place> WHITE_SET = new HashSet<>(Arrays.asList(Place.WHITE, Place.WHITE_KING));
-    private static final Set<Place> BLACK_SET = new HashSet<>(Arrays.asList(Place.BLACK, Place.BLACK_KING));
-    private static final Set<Place> KING_SET = new HashSet<>(Arrays.asList(Place.WHITE_KING, Place.BLACK_KING));
-    private static final Set<Place> UNAVAILABLE_SET = new HashSet<>(Arrays.asList(Place.DISABLED, Place.EMPTY));
+    private static final Set<Chequer> WHITE_SET = new HashSet<>(Arrays.asList(Chequer.WHITE, Chequer.WHITE_KING));
+    private static final Set<Chequer> BLACK_SET = new HashSet<>(Arrays.asList(Chequer.BLACK, Chequer.BLACK_KING));
+    private static final Set<Chequer> KING_SET = new HashSet<>(Arrays.asList(Chequer.WHITE_KING, Chequer.BLACK_KING));
+    private static final Set<Chequer> UNAVAILABLE_SET = new HashSet<>(Arrays.asList(Chequer.DISABLED, Chequer.EMPTY));
 
-    Place(int value) {
+    Chequer(int value) {
         this.value = value;
     }
 

@@ -12,18 +12,18 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Coordinates {
+public class Coordinate {
     @NonNull
     private int column;
     @NonNull
     private int row;
 
-    public Coordinates() {
+    public Coordinate() {
         this.column = -1;
         this.row = -1;
     }
 
-    public Coordinates(Coordinates coordinates) {
+    public Coordinate(Coordinate coordinate) {
         this.column = this.getColumn();
         this.row = this.getRow();
     }

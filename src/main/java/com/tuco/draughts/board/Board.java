@@ -2,7 +2,7 @@ package com.tuco.draughts.board;
 
 import com.tuco.draughts.board.util.BoardBase;
 import com.tuco.draughts.board.util.BoardCreator;
-import com.tuco.draughts.board.util.Coordinates;
+import com.tuco.draughts.board.util.Coordinate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,36 +23,28 @@ public class Board extends BoardBase {
     }
 
     public long countWhiteCheckers() {
-        long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Place::isWhite).count();
+        long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Chequer::isWhite).count();
         LOG.info("Counting white, result: " + result);
         return result;
     }
 
     public long countBlackCheckers() {
-        long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Place::isBlack).count();
+        long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Chequer::isBlack).count();
         LOG.info("Counting black, result: " + result);
         return result;
     }
 
-    public List<Coordinates> getWhiteCoordinates(){
-        return getPlayerCoordinates(true);
-    }
-
-    public List<Coordinates> getBlackCoordinates(){
-        return getPlayerCoordinates(false);
-    }
-
-    private List<Coordinates> getPlayerCoordinates(boolean isWhiteTurn) {
+    public List<Coordinate> getPlayerCoordinates(boolean isWhiteTurn) {
         LOG.info("Getting player coordinates");
-        List<Coordinates> playerCoordinates = new ArrayList<>();
+        List<Coordinate> playerCoordinates = new ArrayList<>();
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 if (isWhiteTurn) {
                     if (gameBoard[i][j].isWhite()) {
-                        playerCoordinates.add(new Coordinates(i, j));
+                        playerCoordinates.add(new Coordinate(i, j));
                     }
                 } else if (gameBoard[i][j].isBlack()) {
-                    playerCoordinates.add(new Coordinates(i, j));
+                    playerCoordinates.add(new Coordinate(i, j));
                 }
             }
         }
@@ -61,10 +53,10 @@ public class Board extends BoardBase {
 
     public void updateKings() {
         for (int i = 0; i < boardSize; i++) {
-            if (gameBoard[i][0] == Place.BLACK) {
-                gameBoard[i][0] = Place.BLACK_KING;
-            } else if (gameBoard[i][boardSize - 1] == Place.WHITE) {
-                gameBoard[i][boardSize - 1] = Place.WHITE_KING;
+            if (gameBoard[i][0] == Chequer.BLACK) {
+                gameBoard[i][0] = Chequer.BLACK_KING;
+            } else if (gameBoard[i][boardSize - 1] == Chequer.WHITE) {
+                gameBoard[i][boardSize - 1] = Chequer.WHITE_KING;
             }
         }
     }
