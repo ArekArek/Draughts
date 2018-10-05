@@ -4,6 +4,7 @@ import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.Chequer;
 import com.tuco.draughts.board.direction.Direction;
 import com.tuco.draughts.board.direction.VerticalDirection;
+import com.tuco.draughts.board.util.CaptureCoordinates;
 import com.tuco.draughts.board.util.Coordinate;
 import com.tuco.draughts.movement.Movement;
 import com.tuco.draughts.movement.MovementContainer;
@@ -58,9 +59,10 @@ public class CasualMovementFinder implements MovementFinder {
 
     private boolean findCaptureMove(final MovementContainer movementContainer, final Movement sourceMovement, final Direction direction) {
         try {
-            Coordinate currentCoordinate = isThisCaptureMovePossible(sourceMovement, direction);
+            CaptureCoordinates possibleCapture = getPossibleCaptureMove(sourceMovement, direction);
             Movement movement = new Movement(sourceMovement);
-            movement.addStep(currentCoordinate);
+            movement.addStep(possibleCapture.getTarget());
+            movement.addHit(possibleCapture.getHit());
             boolean isAnyPossible = processAllDirections(movementContainer, movement);
 
             if (!isAnyPossible) {
@@ -73,7 +75,7 @@ public class CasualMovementFinder implements MovementFinder {
         return true;
     }
 
-    private Coordinate isThisCaptureMovePossible(Movement movement, Direction direction) throws ImpossibleMoveException {
+    private CaptureCoordinates getPossibleCaptureMove(Movement movement, Direction direction) throws ImpossibleMoveException {
         Coordinate previousCoordinate = movement.getLastStep();
         Coordinate hitCoordinate = previousCoordinate.plus(direction);
 
@@ -81,7 +83,7 @@ public class CasualMovementFinder implements MovementFinder {
         if (hitCoordinateChequer.isEnemy(isWhiteTurn)) {
             Coordinate newCoordinate = hitCoordinate.plus(direction);
 
-            if (movement.wasVisited(newCoordinate)) {
+            if (movement.wasHitted(hitCoordinate)) {
                 throw new ImpossibleMoveException(previousCoordinate, direction, "cannot get back to already visited place");
             }
 
@@ -90,7 +92,7 @@ public class CasualMovementFinder implements MovementFinder {
                 throw new ImpossibleMoveException(previousCoordinate, direction, "no empty place to finish");
             }
 
-            return newCoordinate;
+            return new CaptureCoordinates(hitCoordinate, newCoordinate);
         } else {
             throw new ImpossibleMoveException(previousCoordinate, direction, "no enemy to hit");
         }
