@@ -16,15 +16,10 @@ public class BoardBase {
     }
 
     protected BoardBase(BoardBase boardBase) {
-        boardSize = boardBase.boardSize;
-        createClonedBoard(boardBase);
+        this.boardSize = boardBase.boardSize;
+        this.gameBoard = boardBase.gameBoard.clone();
     }
 
-    private void createClonedBoard(BoardBase boardBase) {
-        for (int i = 0; i < boardBase.gameBoard.length; i++) {
-            System.arraycopy(boardBase.gameBoard[i], 0, gameBoard[i], 0, boardBase.gameBoard[i].length);
-        }
-    }
 
     public Chequer getChequer(Coordinate coordinate) {
         if (isOutOfBounds(coordinate)) {
@@ -43,7 +38,7 @@ public class BoardBase {
     private boolean isOutOfBounds(Coordinate coordinate) {
         if (coordinate.getRow() < 0 || coordinate.getRow() >= boardSize) {
             return true;
-        } else return coordinate.getColumn() < 0 && coordinate.getColumn() >= boardSize;
+        } else return coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
     }
 
     @Override

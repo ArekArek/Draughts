@@ -29,7 +29,7 @@ public class DraughtsState extends GameStateImpl {
         setMaximizingTurnNow(true);
     }
 
-    public DraughtsState(DraughtsState parent) {
+    private DraughtsState(DraughtsState parent) {
         this.board = new Board(parent.board);
         this.movementHelper = new MovementHelper(board);
         setMaximizingTurnNow(!parent.maximizingTurnNow);

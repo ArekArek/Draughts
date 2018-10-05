@@ -3,7 +3,9 @@ package com.tuco.draughts.movement;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MovementContainer {
     private List<Movement> movements;
@@ -49,9 +51,14 @@ public class MovementContainer {
         movements.add(movement);
     }
 
-    public int getPower() {
+    private int getPower() {
         Optional<Movement> movement = movements.stream()
                 .max(Comparator.comparing(Movement::getPower));
         return movement.map(Movement::getPower).orElse(0);
+    }
+
+
+    public String toString() {
+        return "MovementContainer(movements=" + this.movements.stream().map(Objects::toString).collect(Collectors.joining("\n\n", "\n", "\n")) + ")";
     }
 }

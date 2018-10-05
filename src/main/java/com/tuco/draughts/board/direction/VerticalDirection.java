@@ -3,7 +3,7 @@ package com.tuco.draughts.board.direction;
 public enum VerticalDirection {
     UP(1), DOWN(-1);
 
-    private int value;
+    private final int value;
 
     VerticalDirection(int value) {
         this.value = value;
