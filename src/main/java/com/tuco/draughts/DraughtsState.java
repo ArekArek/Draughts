@@ -2,6 +2,7 @@ package com.tuco.draughts;
 
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.BoardCreator;
+import com.tuco.draughts.movement.Movement;
 import com.tuco.draughts.movement.MovementContainer;
 import com.tuco.draughts.movement.MovementHelper;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +36,7 @@ public class DraughtsState extends GameStateImpl {
         setMaximizingTurnNow(!parent.maximizingTurnNow);
     }
 
-    public void endTurn() {
+    private void endTurn() {
         board.updateKings();
         setMaximizingTurnNow(!maximizingTurnNow);
     }
@@ -46,6 +47,11 @@ public class DraughtsState extends GameStateImpl {
 
     public boolean isTerminal() {
         return board.countWhiteCheckers() == 0 || board.countBlackCheckers() == 0;
+    }
+
+    public void makeMove(Movement movement) {
+        board.executeMove(movement);
+        endTurn();
     }
 
     @Override

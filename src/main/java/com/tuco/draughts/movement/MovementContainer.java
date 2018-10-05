@@ -1,5 +1,8 @@
 package com.tuco.draughts.movement;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -8,7 +11,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MovementContainer {
+    @Getter
     private List<Movement> movements;
+
+    @Setter
+    private boolean captured;
 
     public MovementContainer() {
         movements = new ArrayList<>();
@@ -52,11 +59,13 @@ public class MovementContainer {
     }
 
     private int getPower() {
+        if (!captured) {
+            return 0;
+        }
         Optional<Movement> movement = movements.stream()
                 .max(Comparator.comparing(Movement::getPower));
         return movement.map(Movement::getPower).orElse(0);
     }
-
 
     public String toString() {
         return "MovementContainer(movements=" + this.movements.stream().map(Objects::toString).collect(Collectors.joining("\n\n", "\n", "\n")) + ")";

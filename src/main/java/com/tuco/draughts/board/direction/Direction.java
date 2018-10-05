@@ -13,7 +13,7 @@ public class Direction {
     private HorizontalDirection horizontalDirection;
     private VerticalDirection verticalDirection;
 
-    public Direction(HorizontalDirection horizontalDirection, VerticalDirection verticalDirection) {
+    private Direction(HorizontalDirection horizontalDirection, VerticalDirection verticalDirection) {
         this.horizontalDirection = horizontalDirection;
         this.verticalDirection = verticalDirection;
     }

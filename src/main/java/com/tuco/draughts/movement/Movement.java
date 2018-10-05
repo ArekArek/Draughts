@@ -12,21 +12,24 @@ import java.util.stream.Collectors;
 
 public class Movement {
 
+    @Getter
     private final List<Coordinate> steps;
-    private final Set<Coordinate> hitted;
+
+    @Getter
+    private final Set<Coordinate> hits;
 
     @Getter
     private boolean finished;
 
     public Movement(Coordinate startPosition) {
         steps = new ArrayList<>();
-        hitted = new HashSet<>();
+        hits = new HashSet<>();
         addStep(startPosition);
     }
 
     public Movement(Movement parent) {
         this.steps = new ArrayList<>(parent.steps);
-        this.hitted = new HashSet<>(parent.hitted);
+        this.hits = new HashSet<>(parent.hits);
         this.finished = parent.finished;
     }
 
@@ -35,12 +38,16 @@ public class Movement {
         return this;
     }
 
+    public Coordinate getFirstStep() {
+        return steps.isEmpty() ? new Coordinate() : steps.get(0);
+    }
+
     public Coordinate getLastStep() {
         return steps.get(steps.size() - 1);
     }
 
     public boolean wasHitted(Coordinate hit) {
-        return hitted.contains(hit);
+        return hits.contains(hit);
     }
 
     public Movement finish() {
@@ -53,7 +60,7 @@ public class Movement {
     }
 
     public void addHit(Coordinate hit) {
-        hitted.add(hit);
+        hits.add(hit);
     }
 
     public String toString() {

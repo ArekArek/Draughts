@@ -24,18 +24,18 @@ public class Board extends BoardBase {
 
     public long countWhiteCheckers() {
         long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Chequer::isWhite).count();
-        LOG.info("Counting white, result: " + result);
+        LOG.debug("Counting white, result: " + result);
         return result;
     }
 
     public long countBlackCheckers() {
         long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Chequer::isBlack).count();
-        LOG.info("Counting black, result: " + result);
+        LOG.debug("Counting black, result: " + result);
         return result;
     }
 
     public List<Coordinate> getPlayerCoordinates(boolean isWhiteTurn) {
-        LOG.info("Getting player coordinates");
+        LOG.debug("Getting player coordinates");
         List<Coordinate> playerCoordinates = new ArrayList<>();
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
