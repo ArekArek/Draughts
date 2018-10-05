@@ -31,7 +31,7 @@ public class MovementHelper {
 
     private MovementContainer generatePossibleMoves(Coordinate startCoordinate, boolean isWhiteTurn) {
         Chequer startChequer = board.getChequer(startCoordinate);
-        MovementFinder movementFinder = startChequer.isKing() ? new KingMovementFinder() : new CasualMovementFinder(isWhiteTurn, board, startCoordinate);
+        MovementFinder movementFinder = startChequer.isKing() ? new KingMovementFinder(isWhiteTurn, board, startCoordinate) : new CasualMovementFinder(isWhiteTurn, board, startCoordinate);
 
         return movementFinder.findMoves();
     }
