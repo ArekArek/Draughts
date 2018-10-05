@@ -1,6 +1,7 @@
 package com.tuco.draughts.board.util;
 
 import com.tuco.draughts.board.Chequer;
+import com.tuco.draughts.movement.Movement;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -8,7 +9,7 @@ public class BoardBase {
 
     protected final int boardSize;
 
-    protected Chequer[][] gameBoard;
+    protected final Chequer[][] gameBoard;
 
     protected BoardBase(BoardCreator boardCreator) {
         gameBoard = boardCreator.createBoard();
@@ -28,17 +29,33 @@ public class BoardBase {
         return gameBoard[coordinate.getColumn()][coordinate.getRow()];
     }
 
-    public void setChequer(Coordinate coordinate, Chequer chequer) {
+    private void setChequer(Coordinate coordinate, Chequer chequer) {
         if (isOutOfBounds(coordinate)) {
             return;
         }
         gameBoard[coordinate.getColumn()][coordinate.getRow()] = chequer;
     }
 
+    private void resetChequer(Coordinate coordinate) {
+        if (!isOutOfBounds(coordinate)) {
+            gameBoard[coordinate.getColumn()][coordinate.getRow()] = Chequer.EMPTY;
+        }
+    }
+
     private boolean isOutOfBounds(Coordinate coordinate) {
         if (coordinate.getRow() < 0 || coordinate.getRow() >= boardSize) {
             return true;
         } else return coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
+    }
+
+    public void executeMove(Movement movement) {
+        Coordinate startCoordinate = movement.getFirstStep();
+        Chequer startChequer = getChequer(startCoordinate);
+        Coordinate finalCoordinate = movement.getLastStep();
+
+        movement.getSteps().forEach(this::resetChequer);
+        movement.getHits().forEach(this::resetChequer);
+        setChequer(finalCoordinate, startChequer);
     }
 
     @Override

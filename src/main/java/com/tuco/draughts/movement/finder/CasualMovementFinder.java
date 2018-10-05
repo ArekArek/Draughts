@@ -29,8 +29,10 @@ public class CasualMovementFinder implements MovementFinder {
     @Override
     public MovementContainer findMoves() {
         MovementContainer result = new MovementContainer();
+        result.setCaptured(true);
         boolean thereArePossibleCaptureMoves = processAllDirections(result, new Movement(startCoordinate));
         if (!thereArePossibleCaptureMoves) {
+            result.setCaptured(false);
             MovementContainer foundMoves = findNormalGeneralMoves();
             result.insertMovements(foundMoves);
         }
