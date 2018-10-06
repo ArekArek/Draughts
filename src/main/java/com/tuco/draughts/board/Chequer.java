@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum Chequer {
-    WHITE(1), WHITE_KING(5), BLACK(-1), BLACK_KING(-5), EMPTY(0), DISABLED(0);
+    WHITE(1), WHITE_KING(2), BLACK(-1), BLACK_KING(-2), EMPTY(0), DISABLED(0);
 
     private final int value;
 
