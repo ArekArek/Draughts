@@ -3,6 +3,7 @@ package com.tuco.draughts;
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.BoardCreator;
 import com.tuco.draughts.board.util.Coordinate;
+import com.tuco.draughts.game.DraughtsDefaultHeuristic;
 import com.tuco.draughts.movement.MovementHelper;
 import com.tuco.draughts.movement.util.Movement;
 import com.tuco.draughts.movement.util.MovementCoder;
@@ -24,6 +25,10 @@ public class DraughtsState extends GameStateImpl {
     private final Board board;
 
     private final MovementHelper movementHelper;
+
+    static {
+        setHFunction(new DraughtsDefaultHeuristic());
+    }
 
     public DraughtsState(BoardCreator boardCreator) {
         this.board = new Board(boardCreator);
