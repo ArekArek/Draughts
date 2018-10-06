@@ -6,8 +6,9 @@ import com.tuco.draughts.board.direction.Direction;
 import com.tuco.draughts.board.direction.VerticalDirection;
 import com.tuco.draughts.board.util.CaptureCoordinates;
 import com.tuco.draughts.board.util.Coordinate;
-import com.tuco.draughts.movement.Movement;
-import com.tuco.draughts.movement.MovementContainer;
+import com.tuco.draughts.movement.util.ImpossibleMoveException;
+import com.tuco.draughts.movement.util.Movement;
+import com.tuco.draughts.movement.util.MovementContainer;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +54,7 @@ public class CasualMovementFinder implements MovementFinder {
         Coordinate newCoordinate = startCoordinate.plus(direction);
         Chequer newChequer = board.getChequer(newCoordinate);
         if (newChequer.isEmpty()) {
-            return new Movement(startCoordinate).addStep(newCoordinate).finish();
+            return new Movement(startCoordinate).addStep(newCoordinate);
         } else {
             return null;
         }
@@ -68,7 +69,6 @@ public class CasualMovementFinder implements MovementFinder {
             boolean isAnyPossible = processAllDirections(movementContainer, movement);
 
             if (!isAnyPossible) {
-                movement.finish();
                 movementContainer.insertMovement(movement);
             }
         } catch (ImpossibleMoveException e) {

@@ -5,8 +5,9 @@ import com.tuco.draughts.board.Chequer;
 import com.tuco.draughts.board.direction.Direction;
 import com.tuco.draughts.board.util.CaptureCoordinates;
 import com.tuco.draughts.board.util.Coordinate;
-import com.tuco.draughts.movement.Movement;
-import com.tuco.draughts.movement.MovementContainer;
+import com.tuco.draughts.movement.util.ImpossibleMoveException;
+import com.tuco.draughts.movement.util.Movement;
+import com.tuco.draughts.movement.util.MovementContainer;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -111,7 +112,6 @@ public class KingMovementFinder implements MovementFinder {
         boolean isAnyPossible = findAllCaptureMoves(movementContainer, sourceMovement);
 
         if (!isAnyPossible) {
-            sourceMovement.finish();
             movementContainer.insertMovement(sourceMovement);
         }
     }

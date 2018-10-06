@@ -1,4 +1,4 @@
-package com.tuco.draughts.movement;
+package com.tuco.draughts.movement.util;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,12 @@ public class MovementContainer {
     private boolean captured;
 
     public MovementContainer() {
+        this.captured = false;
         movements = new ArrayList<>();
     }
 
     public MovementContainer(List<Movement> movements) {
+        this.captured = false;
         this.movements = movements;
     }
 
@@ -34,6 +36,7 @@ public class MovementContainer {
     }
 
     private void setMovements(MovementContainer movementContainer) {
+        this.captured = movementContainer.captured;
         this.movements = new ArrayList<>(movementContainer.movements);
     }
 

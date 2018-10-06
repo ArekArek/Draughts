@@ -1,6 +1,5 @@
 package com.tuco.draughts.board.direction;
 
-import com.tuco.draughts.board.util.Coordinate;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -10,33 +9,12 @@ import java.util.Set;
 @EqualsAndHashCode
 @Getter
 public class Direction {
-    private HorizontalDirection horizontalDirection;
-    private VerticalDirection verticalDirection;
+    private final HorizontalDirection horizontalDirection;
+    private final VerticalDirection verticalDirection;
 
     private Direction(HorizontalDirection horizontalDirection, VerticalDirection verticalDirection) {
         this.horizontalDirection = horizontalDirection;
         this.verticalDirection = verticalDirection;
-    }
-
-    public Direction(Coordinate startCoordinate, Coordinate targetCoordinate) {
-        resolveHorizontalDirection(startCoordinate, targetCoordinate);
-        resolveVerticalDirection(startCoordinate, targetCoordinate);
-    }
-
-    private void resolveHorizontalDirection(Coordinate startCoordinate, Coordinate targetCoordinate) {
-        if (targetCoordinate.getColumn() > startCoordinate.getColumn()) {
-            this.horizontalDirection = HorizontalDirection.RIGHT;
-        } else {
-            this.horizontalDirection = HorizontalDirection.LEFT;
-        }
-    }
-
-    private void resolveVerticalDirection(Coordinate startCoordinate, Coordinate targetCoordinate) {
-        if (targetCoordinate.getRow() > startCoordinate.getRow()) {
-            this.verticalDirection = VerticalDirection.UP;
-        } else {
-            this.verticalDirection = VerticalDirection.DOWN;
-        }
     }
 
     public static Set<Direction> getAllDirections() {

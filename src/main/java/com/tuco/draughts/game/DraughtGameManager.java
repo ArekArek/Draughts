@@ -1,8 +1,8 @@
 package com.tuco.draughts.game;
 
 import com.tuco.draughts.DraughtsState;
-import com.tuco.draughts.movement.Movement;
 import com.tuco.draughts.movement.maker.MovementMaker;
+import com.tuco.draughts.movement.util.Movement;
 import lombok.Builder;
 
 import java.util.Optional;
@@ -20,18 +20,18 @@ public class DraughtGameManager {
         Optional.ofNullable(generalChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
 
         if (state.isMaximizingTurnNow()) {
-            makeWhiteTurn(playerWhite, whiteChangeTurnListener);
+            makeTurn(playerWhite, whiteChangeTurnListener);
         } else {
-            makeWhiteTurn(playerBlack, blackChangeTurnListener);
+            makeTurn(playerBlack, blackChangeTurnListener);
         }
 
         Optional.ofNullable(generalChangeTurnListener).ifPresent(ChangeTurnListener::afterTurn);
     }
 
-    private void makeWhiteTurn(MovementMaker playerWhite, ChangeTurnListener playerChangeTurnListener) {
+    private void makeTurn(MovementMaker movementMaker, ChangeTurnListener playerChangeTurnListener) {
         Optional.ofNullable(playerChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
 
-        Movement movement = playerWhite.takeMove();
+        Movement movement = movementMaker.takeMove();
         state.makeMove(movement);
 
         Optional.ofNullable(playerChangeTurnListener).ifPresent(ChangeTurnListener::afterTurn);

@@ -6,6 +6,7 @@ import com.tuco.draughts.board.util.Coordinate;
 import com.tuco.draughts.movement.finder.CasualMovementFinder;
 import com.tuco.draughts.movement.finder.KingMovementFinder;
 import com.tuco.draughts.movement.finder.MovementFinder;
+import com.tuco.draughts.movement.util.MovementContainer;
 
 import java.util.List;
 

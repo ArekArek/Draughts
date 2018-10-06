@@ -1,4 +1,4 @@
-package com.tuco.draughts.movement;
+package com.tuco.draughts.movement.util;
 
 import com.tuco.draughts.board.util.Coordinate;
 import lombok.Getter;
@@ -18,9 +18,6 @@ public class Movement {
     @Getter
     private final Set<Coordinate> hits;
 
-    @Getter
-    private boolean finished;
-
     public Movement(Coordinate startPosition) {
         steps = new ArrayList<>();
         hits = new HashSet<>();
@@ -30,7 +27,11 @@ public class Movement {
     public Movement(Movement parent) {
         this.steps = new ArrayList<>(parent.steps);
         this.hits = new HashSet<>(parent.hits);
-        this.finished = parent.finished;
+    }
+
+    public Movement(List<Coordinate> steps, Set<Coordinate> hits) {
+        this.steps = steps;
+        this.hits = hits;
     }
 
     public Movement addStep(Coordinate coordinate) {
@@ -50,11 +51,6 @@ public class Movement {
         return hits.contains(hit);
     }
 
-    public Movement finish() {
-        finished = true;
-        return this;
-    }
-
     public int getPower() {
         return steps.size() - 1;
     }
@@ -64,6 +60,6 @@ public class Movement {
     }
 
     public String toString() {
-        return "Movement(steps=" + this.steps.stream().map(Objects::toString).collect(Collectors.joining("\n\t", "\n\t", "\n\t")) + ", finished=" + this.finished + ")";
+        return "Movement(steps=" + this.steps.stream().map(Objects::toString).collect(Collectors.joining("\n\t", "\n\t", "\n\t")) + ")";
     }
 }

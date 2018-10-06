@@ -2,7 +2,7 @@ package com.tuco.draughts.movement.maker;
 
 import com.tuco.draughts.DraughtsState;
 import com.tuco.draughts.board.util.Coordinate;
-import com.tuco.draughts.movement.Movement;
+import com.tuco.draughts.movement.util.Movement;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.tuco.draughts.board.util;
 
 import com.tuco.draughts.board.Chequer;
-import com.tuco.draughts.movement.Movement;
+import com.tuco.draughts.movement.util.Movement;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -17,10 +17,16 @@ public class BoardBase {
     }
 
     protected BoardBase(BoardBase boardBase) {
-        this.boardSize = boardBase.boardSize;
-        this.gameBoard = boardBase.gameBoard.clone();
+        boardSize = boardBase.boardSize;
+        gameBoard = new Chequer[boardSize][boardSize];
+        createClonedBoard(boardBase);
     }
 
+    private void createClonedBoard(BoardBase boardBase) {
+        for (int i = 0; i < boardBase.gameBoard.length; i++) {
+            System.arraycopy(boardBase.gameBoard[i], 0, this.gameBoard[i], 0, boardBase.gameBoard[i].length);
+        }
+    }
 
     public Chequer getChequer(Coordinate coordinate) {
         if (isOutOfBounds(coordinate)) {

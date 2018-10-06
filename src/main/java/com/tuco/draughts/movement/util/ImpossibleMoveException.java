@@ -1,4 +1,4 @@
-package com.tuco.draughts.movement.finder;
+package com.tuco.draughts.movement.util;
 
 import com.tuco.draughts.board.direction.Direction;
 import com.tuco.draughts.board.util.Coordinate;
