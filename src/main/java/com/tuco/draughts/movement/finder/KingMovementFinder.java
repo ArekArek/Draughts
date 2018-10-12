@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class KingMovementFinder implements MovementFinder {
@@ -121,7 +120,7 @@ public class KingMovementFinder implements MovementFinder {
 
         List<Movement> possibleNormalMoves = allDirections.stream()
                 .map(this::findPossibleNormalTargetPositions)
-                .filter(Predicate.not(Set::isEmpty))
+                .filter(s -> !s.isEmpty())
                 .flatMap(Collection::stream)
                 .map(m -> new Movement(startCoordinate).addStep(m))
                 .collect(Collectors.toList());

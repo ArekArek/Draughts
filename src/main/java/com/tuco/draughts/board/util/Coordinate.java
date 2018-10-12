@@ -3,7 +3,6 @@ package com.tuco.draughts.board.util;
 import com.tuco.draughts.board.direction.Direction;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -12,9 +11,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class Coordinate {
-    @NonNull
+
     private int column;
-    @NonNull
     private int row;
 
     public Coordinate() {
