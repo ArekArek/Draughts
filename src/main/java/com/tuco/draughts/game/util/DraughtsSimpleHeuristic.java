@@ -1,14 +1,14 @@
-package com.tuco.draughts.game;
+package com.tuco.draughts.game.util;
 
-import com.tuco.draughts.DraughtsState;
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.Coordinate;
+import com.tuco.draughts.game.DraughtsState;
 import sac.State;
 import sac.StateFunction;
 
 import java.util.List;
 
-public class DraughtsDefaultHeuristic extends StateFunction {
+public class DraughtsSimpleHeuristic extends StateFunction {
 
     @Override
     public double calculate(State state) {
