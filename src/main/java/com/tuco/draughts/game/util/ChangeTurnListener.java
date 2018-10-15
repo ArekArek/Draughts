@@ -1,4 +1,4 @@
-package com.tuco.draughts.game;
+package com.tuco.draughts.game.util;
 
 public interface ChangeTurnListener {
 
