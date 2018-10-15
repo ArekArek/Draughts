@@ -4,26 +4,31 @@ import com.tuco.draughts.board.util.Coordinate;
 import com.tuco.draughts.game.DraughtsState;
 import com.tuco.draughts.movement.util.Movement;
 import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class ConsoleMovementMaker implements MovementMaker {
+public class HumanMovementMaker implements MovementMaker {
 
-    final DraughtsState draughtsState;
+    private final static Logger LOG = LogManager.getLogger(HumanMovementMaker.class);
+
+    private final DraughtsState draughtsState;
+    private final PositionLoader positionLoader;
 
     @Override
     public Movement takeMove() {
         List<Movement> possibleMoves = draughtsState.generatePossibleMoves().getMovements();
 
-        System.out.println("Insert start position");
-        Coordinate startPosition = loadPositionFromUser();
+        LOG.log(Level.TRACE, "Insert start position");
+        Coordinate startPosition = positionLoader.loadPositionFromUser();
 
         possibleMoves = possibleMoves.stream().filter(m -> m.getFirstStep().equals(startPosition)).collect(Collectors.toList());
         if (possibleMoves.isEmpty()) {
-            System.out.println("Incorrect start position");
+            LOG.log(Level.TRACE, "Incorrect start position");
             return takeMove();
         } else {
             return takeMove(possibleMoves, 1);
@@ -37,31 +42,20 @@ public class ConsoleMovementMaker implements MovementMaker {
             if (sourcePossibleMoves.size() == 1) {
                 return sourcePossibleMoves.get(0);
             } else {
-                System.out.println("Incorrect move");
+                LOG.log(Level.TRACE, "Incorrect move");
             }
         }
 
-        System.out.println("Insert next position");
-        Coordinate coordinate = loadPositionFromUser();
+        LOG.log(Level.TRACE, "Insert next position");
+        Coordinate coordinate = positionLoader.loadPositionFromUser();
 
         possibleMoves = possibleMoves.stream().filter(m -> m.getSteps().get(moveCount).equals(coordinate)).collect(Collectors.toList());
 
         if (possibleMoves.isEmpty()) {
-            System.out.println("Incorrect target position");
+            LOG.log(Level.TRACE, "Incorrect target position");
             return takeMove();
         } else {
             return takeMove(possibleMoves, moveCount + 1);
         }
-    }
-
-    private static Coordinate loadPositionFromUser() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("\tInsert column number: ");
-        int column = scanner.nextInt();
-        System.out.print("\tInsert row number: ");
-        int row = scanner.nextInt();
-
-        return new Coordinate(column, row);
     }
 }
