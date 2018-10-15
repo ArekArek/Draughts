@@ -1,9 +1,10 @@
-package com.tuco.draughts;
+package com.tuco.draughts.game;
 
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.BoardCreator;
 import com.tuco.draughts.board.util.Coordinate;
-import com.tuco.draughts.game.DraughtsDefaultHeuristic;
+import com.tuco.draughts.game.util.DraughtsSimpleHeuristic;
+import com.tuco.draughts.game.util.Player;
 import com.tuco.draughts.movement.MovementHelper;
 import com.tuco.draughts.movement.util.Movement;
 import com.tuco.draughts.movement.util.MovementCoder;
@@ -27,7 +28,7 @@ public class DraughtsState extends GameStateImpl {
     private final MovementHelper movementHelper;
 
     static {
-        setHFunction(new DraughtsDefaultHeuristic());
+        setHFunction(new DraughtsSimpleHeuristic());
     }
 
     public DraughtsState(BoardCreator boardCreator) {
@@ -58,6 +59,10 @@ public class DraughtsState extends GameStateImpl {
     public void makeMove(Movement movement) {
         board.executeMove(movement);
         endTurn();
+    }
+
+    public Player getPlayer() {
+        return isMaximizingTurnNow() ? Player.WHITE : Player.BLACK;
     }
 
     @Override
