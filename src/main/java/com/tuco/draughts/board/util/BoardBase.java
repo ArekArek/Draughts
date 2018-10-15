@@ -4,6 +4,8 @@ import com.tuco.draughts.board.Chequer;
 import com.tuco.draughts.movement.util.Movement;
 import lombok.EqualsAndHashCode;
 
+import java.util.Arrays;
+
 @EqualsAndHashCode
 public class BoardBase {
 
@@ -18,14 +20,11 @@ public class BoardBase {
 
     protected BoardBase(BoardBase boardBase) {
         boardSize = boardBase.boardSize;
-        gameBoard = new Chequer[boardSize][boardSize];
-        createClonedBoard(boardBase);
+        gameBoard = cloneBoard(boardBase.gameBoard);
     }
 
-    private void createClonedBoard(BoardBase boardBase) {
-        for (int i = 0; i < boardBase.gameBoard.length; i++) {
-            System.arraycopy(boardBase.gameBoard[i], 0, this.gameBoard[i], 0, boardBase.gameBoard[i].length);
-        }
+    private static Chequer[][] cloneBoard(Chequer[][] source) {
+        return Arrays.stream(source).map(Chequer[]::clone).toArray(Chequer[][]::new);
     }
 
     public Chequer getChequer(Coordinate coordinate) {
@@ -62,6 +61,10 @@ public class BoardBase {
         movement.getSteps().forEach(this::resetChequer);
         movement.getHits().forEach(this::resetChequer);
         setChequer(finalCoordinate, startChequer);
+    }
+
+    public Chequer[][] getBase() {
+        return cloneBoard(gameBoard);
     }
 
     @Override
