@@ -51,8 +51,4 @@ public enum Chequer {
     public boolean isEmpty() {
         return EMPTY.equals(this);
     }
-
-    public boolean isChequer() {
-        return EMPTY != this && DISABLED != this;
-    }
 }
