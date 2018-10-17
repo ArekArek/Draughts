@@ -1,17 +1,9 @@
 package com.tuco.draughts.board;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 public enum Chequer {
     WHITE(1), WHITE_KING(2), BLACK(-1), BLACK_KING(-2), EMPTY(0), DISABLED(0);
 
     private final int value;
-
-    private static final Set<Chequer> WHITE_SET = new HashSet<>(Arrays.asList(Chequer.WHITE, Chequer.WHITE_KING));
-    private static final Set<Chequer> BLACK_SET = new HashSet<>(Arrays.asList(Chequer.BLACK, Chequer.BLACK_KING));
-    private static final Set<Chequer> KING_SET = new HashSet<>(Arrays.asList(Chequer.WHITE_KING, Chequer.BLACK_KING));
 
     Chequer(int value) {
         this.value = value;
@@ -41,22 +33,26 @@ public enum Chequer {
     }
 
     public boolean isEnemy(boolean isWhiteTurn) {
-        return (isWhiteTurn && BLACK_SET.contains(this)) || (!isWhiteTurn && WHITE_SET.contains(this));
+        return (isWhiteTurn && isBlack()) || (!isWhiteTurn && isWhite());
     }
 
     public boolean isKing() {
-        return KING_SET.contains(this);
+        return WHITE_KING == this || BLACK_KING == this;
     }
 
     public boolean isWhite() {
-        return WHITE_SET.contains(this);
+        return WHITE == this || WHITE_KING == this;
     }
 
     public boolean isBlack() {
-        return BLACK_SET.contains(this);
+        return BLACK == this || BLACK_KING == this;
     }
 
     public boolean isEmpty() {
         return EMPTY.equals(this);
+    }
+
+    public boolean isChequer() {
+        return EMPTY != this && DISABLED != this;
     }
 }
