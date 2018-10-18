@@ -4,9 +4,6 @@ import com.tuco.draughts.board.util.Coordinate;
 import com.tuco.draughts.game.DraughtsState;
 import com.tuco.draughts.movement.util.Movement;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,21 +11,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class HumanMovementMaker implements MovementMaker {
 
-    private final static Logger LOG = LogManager.getLogger(HumanMovementMaker.class);
-
     private final DraughtsState draughtsState;
     private final PositionLoader positionLoader;
+    private final HumanMovementInformator humanMovementInformator;
 
     @Override
     public Movement takeMove() {
         List<Movement> possibleMoves = draughtsState.generatePossibleMoves().getMovements();
+        humanMovementInformator.choosePosition(possibleMoves);
 
-        LOG.log(Level.TRACE, "Insert start position");
         Coordinate startPosition = positionLoader.loadPositionFromUser();
 
         possibleMoves = possibleMoves.stream().filter(m -> m.getFirstStep().equals(startPosition)).collect(Collectors.toList());
         if (possibleMoves.isEmpty()) {
-            LOG.log(Level.TRACE, "Incorrect start position");
+            humanMovementInformator.wrongPositionChosen();
             return takeMove();
         } else {
             return takeMove(possibleMoves, 1);
@@ -42,17 +38,17 @@ public class HumanMovementMaker implements MovementMaker {
             if (sourcePossibleMoves.size() == 1) {
                 return sourcePossibleMoves.get(0);
             } else {
-                LOG.log(Level.TRACE, "Incorrect move");
+                humanMovementInformator.wrongPositionChosen();
             }
         }
 
-        LOG.log(Level.TRACE, "Insert next position");
+        humanMovementInformator.choosePosition(possibleMoves);
         Coordinate coordinate = positionLoader.loadPositionFromUser();
 
         possibleMoves = possibleMoves.stream().filter(m -> m.getSteps().get(moveCount).equals(coordinate)).collect(Collectors.toList());
 
         if (possibleMoves.isEmpty()) {
-            LOG.log(Level.TRACE, "Incorrect target position");
+            humanMovementInformator.wrongPositionChosen();
             return takeMove();
         } else {
             return takeMove(possibleMoves, moveCount + 1);

@@ -1,6 +1,7 @@
-package com.tuco.draughts.movement.maker;
+package com.tuco.draughts.console;
 
 import com.tuco.draughts.board.util.Coordinate;
+import com.tuco.draughts.movement.maker.PositionLoader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
