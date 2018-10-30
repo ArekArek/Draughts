@@ -49,6 +49,6 @@ public enum Chequer {
     }
 
     public boolean isEmpty() {
-        return EMPTY.equals(this);
+        return EMPTY == this;
     }
 }
