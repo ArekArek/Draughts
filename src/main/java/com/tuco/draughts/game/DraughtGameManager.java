@@ -32,22 +32,24 @@ public class DraughtGameManager {
     private void makeTurn() {
         Optional.ofNullable(generalChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
 
+        Movement movement;
         if (state.isMaximizingTurnNow()) {
-            makeDetailedTurn(playerWhite, whiteChangeTurnListener);
+            movement = makeDetailedTurn(playerWhite, whiteChangeTurnListener);
         } else {
-            makeDetailedTurn(playerBlack, blackChangeTurnListener);
+            movement = makeDetailedTurn(playerBlack, blackChangeTurnListener);
         }
 
-        Optional.ofNullable(generalChangeTurnListener).ifPresent(ChangeTurnListener::afterTurn);
+        Optional.ofNullable(generalChangeTurnListener).ifPresent(l -> l.afterTurn(movement));
     }
 
-    private void makeDetailedTurn(MovementMaker movementMaker, ChangeTurnListener playerChangeTurnListener) {
+    private Movement makeDetailedTurn(MovementMaker movementMaker, ChangeTurnListener playerChangeTurnListener) {
         Optional.ofNullable(playerChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
 
         Movement movement = movementMaker.takeMove();
         state.makeMove(movement);
 
-        Optional.ofNullable(playerChangeTurnListener).ifPresent(ChangeTurnListener::afterTurn);
+        Optional.ofNullable(playerChangeTurnListener).ifPresent(l -> l.afterTurn(movement));
+        return movement;
     }
 
 }
