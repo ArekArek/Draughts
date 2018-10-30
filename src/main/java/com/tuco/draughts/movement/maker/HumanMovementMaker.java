@@ -18,16 +18,11 @@ public class HumanMovementMaker implements MovementMaker {
     @Override
     public Movement takeMove() {
         List<Movement> possibleMoves = draughtsState.generatePossibleMoves().getMovements();
-        humanMovementInformator.choosePosition(possibleMoves);
-
-        Coordinate startPosition = positionLoader.loadPositionFromUser();
-
-        possibleMoves = possibleMoves.stream().filter(m -> m.getFirstStep().equals(startPosition)).collect(Collectors.toList());
         if (possibleMoves.isEmpty()) {
             humanMovementInformator.wrongPositionChosen();
             return takeMove();
         } else {
-            return takeMove(possibleMoves, 1);
+            return takeMove(possibleMoves, 0);
         }
     }
 
@@ -35,22 +30,19 @@ public class HumanMovementMaker implements MovementMaker {
         List<Movement> possibleMoves = sourcePossibleMoves.stream().filter(m -> m.getPower() >= moveCount).collect(Collectors.toList());
 
         if (possibleMoves.isEmpty()) {
-            if (sourcePossibleMoves.size() == 1) {
-                return sourcePossibleMoves.get(0);
-            } else {
-                humanMovementInformator.wrongPositionChosen();
-            }
+            return sourcePossibleMoves.get(0);
         }
 
-        humanMovementInformator.choosePosition(possibleMoves);
+        List<Coordinate> possiblePositions = possibleMoves.stream().map(m -> m.getSteps().get(moveCount)).distinct().collect(Collectors.toList());
+        humanMovementInformator.choosePosition(possiblePositions);
+
         Coordinate coordinate = positionLoader.loadPositionFromUser();
 
-        possibleMoves = possibleMoves.stream().filter(m -> m.getSteps().get(moveCount).equals(coordinate)).collect(Collectors.toList());
-
-        if (possibleMoves.isEmpty()) {
+        if (!possiblePositions.contains(coordinate)) {
             humanMovementInformator.wrongPositionChosen();
             return takeMove();
         } else {
+            possibleMoves = possibleMoves.stream().filter(m -> m.getSteps().get(moveCount).equals(coordinate)).collect(Collectors.toList());
             return takeMove(possibleMoves, moveCount + 1);
         }
     }
