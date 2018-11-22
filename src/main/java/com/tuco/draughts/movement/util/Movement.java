@@ -4,10 +4,8 @@ import com.tuco.draughts.board.util.Coordinate;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Movement {
@@ -16,20 +14,20 @@ public class Movement {
     private final List<Coordinate> steps;
 
     @Getter
-    private final Set<Coordinate> hits;
+    private final List<Coordinate> hits;
 
     public Movement(Coordinate startPosition) {
         steps = new ArrayList<>();
-        hits = new HashSet<>();
+        hits = new ArrayList<>();
         addStep(startPosition);
     }
 
     public Movement(Movement parent) {
         this.steps = new ArrayList<>(parent.steps);
-        this.hits = new HashSet<>(parent.hits);
+        this.hits = new ArrayList<>(parent.hits);
     }
 
-    public Movement(List<Coordinate> steps, Set<Coordinate> hits) {
+    public Movement(List<Coordinate> steps, List<Coordinate> hits) {
         this.steps = steps;
         this.hits = hits;
     }

@@ -5,7 +5,6 @@ import com.tuco.draughts.board.util.Coordinate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MovementCoder {
@@ -35,10 +34,10 @@ public class MovementCoder {
         String[] codedSteps = codedParts[0].split(STEPS_DELIMITER);
         List<Coordinate> steps = Arrays.stream(codedSteps).map(MovementCoder::decodeCoordinate).collect(Collectors.toList());
         if (codedParts.length <= 1) {
-            return new Movement(steps, Collections.emptySet());
+            return new Movement(steps, Collections.emptyList());
         }
         String[] codedHits = codedParts[1].split(HITS_DELIMITER);
-        Set<Coordinate> hits = Arrays.stream(codedHits).map(MovementCoder::decodeCoordinate).collect(Collectors.toSet());
+        List<Coordinate> hits = Arrays.stream(codedHits).map(MovementCoder::decodeCoordinate).collect(Collectors.toList());
 
         return new Movement(steps, hits);
     }
