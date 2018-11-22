@@ -9,6 +9,7 @@ import sac.game.GameSearchConfigurator;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class AIMovementMaker extends GameSearchConfigurator implements MovementMaker {
 
@@ -28,17 +29,29 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
     @Override
     public Movement takeMove() {
         DraughtsState.setHFunction(heuristic);
+        List<String> bestMoves;
 
         algorithm.setInitial(draughtsState);
-        algorithm.execute();
+        try {
+            algorithm.execute();
+        } catch (NullPointerException e) {
+        } finally {
+            bestMoves = algorithm.getBestMoves();
+        }
 
-        List<String> bestMoves = algorithm.getBestMoves();
         String bestMove = ((bestMoves.size() == 1) ? bestMoves.get(0) : drawMove(bestMoves));
 
         return MovementCoder.decode(bestMove);
     }
 
     private String drawMove(List<String> bestMoves) {
+        if (bestMoves == null || bestMoves.size() == 0) {
+            bestMoves = draughtsState.generatePossibleMoves()
+                    .getMovements()
+                    .stream()
+                    .map(MovementCoder::code)
+                    .collect(Collectors.toList());
+        }
         int index = random.nextInt(bestMoves.size());
         return bestMoves.get(index);
     }
