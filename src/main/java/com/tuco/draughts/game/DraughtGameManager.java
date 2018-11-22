@@ -1,6 +1,7 @@
 package com.tuco.draughts.game;
 
 import com.tuco.draughts.game.util.ChangeTurnListener;
+import com.tuco.draughts.movement.maker.AIMovementMaker;
 import com.tuco.draughts.movement.maker.MovementMaker;
 import com.tuco.draughts.movement.util.Movement;
 import lombok.Builder;
@@ -50,6 +51,15 @@ public class DraughtGameManager {
 
         Optional.ofNullable(playerChangeTurnListener).ifPresent(l -> l.afterTurn(movement));
         return movement;
+    }
+
+    public void stopGame() {
+        if (playerWhite instanceof AIMovementMaker) {
+            ((AIMovementMaker) playerWhite).stopMove();
+        }
+        if (playerBlack instanceof AIMovementMaker) {
+            ((AIMovementMaker) playerBlack).stopMove();
+        }
     }
 
 }

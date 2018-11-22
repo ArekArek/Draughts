@@ -55,4 +55,8 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
         int index = random.nextInt(bestMoves.size());
         return bestMoves.get(index);
     }
+
+    public void stopMove() {
+        algorithm.forceStop();
+    }
 }
