@@ -1,17 +1,7 @@
 package com.tuco.draughts.board;
 
 public enum Chequer {
-    WHITE(1), WHITE_KING(2), BLACK(-1), BLACK_KING(-2), EMPTY(0), DISABLED(0);
-
-    private final int value;
-
-    Chequer(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
-        return value;
-    }
+    WHITE, WHITE_KING, BLACK, BLACK_KING, EMPTY, DISABLED;
 
     public char toCharacter() {
         switch (this) {
