@@ -54,12 +54,7 @@ public class DraughtGameManager {
     }
 
     public void stopGame() {
-        if (playerWhite instanceof AIMovementMaker) {
-            ((AIMovementMaker) playerWhite).stopMove();
-        }
-        if (playerBlack instanceof AIMovementMaker) {
-            ((AIMovementMaker) playerBlack).stopMove();
-        }
+        playerWhite.stop();
+        playerBlack.stop();
     }
-
 }

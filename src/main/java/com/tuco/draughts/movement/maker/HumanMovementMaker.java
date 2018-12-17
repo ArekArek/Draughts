@@ -16,7 +16,7 @@ public class HumanMovementMaker implements MovementMaker {
     private final HumanMovementInformator humanMovementInformator;
 
     @Override
-    public Movement takeMove() {
+    public Movement takeMove() throws MoveStoppedException {
         List<Movement> possibleMoves = draughtsState.generatePossibleMoves().getMovements();
         if (possibleMoves.isEmpty()) {
             humanMovementInformator.wrongPositionChosen();
@@ -26,7 +26,7 @@ public class HumanMovementMaker implements MovementMaker {
         }
     }
 
-    private Movement takeMove(List<Movement> sourcePossibleMoves, final int moveCount) {
+    private Movement takeMove(List<Movement> sourcePossibleMoves, final int moveCount) throws MoveStoppedException {
         List<Movement> possibleMoves = sourcePossibleMoves.stream().filter(m -> m.getPower() >= moveCount).collect(Collectors.toList());
 
         if (possibleMoves.isEmpty()) {
@@ -45,5 +45,10 @@ public class HumanMovementMaker implements MovementMaker {
             possibleMoves = possibleMoves.stream().filter(m -> m.getSteps().get(moveCount).equals(coordinate)).collect(Collectors.toList());
             return takeMove(possibleMoves, moveCount + 1);
         }
+    }
+
+    @Override
+    public void stop() {
+        positionLoader.stop();
     }
 }

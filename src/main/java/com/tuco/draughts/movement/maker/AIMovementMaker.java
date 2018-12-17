@@ -56,7 +56,8 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
         return bestMoves.get(index);
     }
 
-    public void stopMove() {
+    @Override
+    public void stop() {
         algorithm.forceStop();
     }
 }
