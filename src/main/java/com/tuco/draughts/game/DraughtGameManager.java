@@ -1,16 +1,20 @@
 package com.tuco.draughts.game;
 
 import com.tuco.draughts.game.util.ChangeTurnListener;
-import com.tuco.draughts.movement.maker.AIMovementMaker;
+import com.tuco.draughts.movement.maker.MoveStoppedException;
 import com.tuco.draughts.movement.maker.MovementMaker;
 import com.tuco.draughts.movement.util.Movement;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
 @Builder
 public class DraughtGameManager {
+    private final static Logger LOG = LogManager.getLogger(DraughtGameManager.class);
+
     @Getter
     private final DraughtsState state;
     private final MovementMaker playerWhite;
@@ -25,12 +29,17 @@ public class DraughtGameManager {
     public void play() {
         playing = true;
         while (!state.isTerminal()) {
-            makeTurn();
+            try {
+                makeTurn();
+            } catch (MoveStoppedException e) {
+                LOG.info("Move was stopped");
+                break;
+            }
         }
         playing = false;
     }
 
-    private void makeTurn() {
+    private void makeTurn() throws MoveStoppedException {
         Optional.ofNullable(generalChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
 
         Movement movement;
@@ -39,11 +48,10 @@ public class DraughtGameManager {
         } else {
             movement = makeDetailedTurn(playerBlack, blackChangeTurnListener);
         }
-
         Optional.ofNullable(generalChangeTurnListener).ifPresent(l -> l.afterTurn(movement));
     }
 
-    private Movement makeDetailedTurn(MovementMaker movementMaker, ChangeTurnListener playerChangeTurnListener) {
+    private Movement makeDetailedTurn(MovementMaker movementMaker, ChangeTurnListener playerChangeTurnListener) throws MoveStoppedException {
         Optional.ofNullable(playerChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
 
         Movement movement = movementMaker.takeMove();
