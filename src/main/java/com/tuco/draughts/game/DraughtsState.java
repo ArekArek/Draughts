@@ -3,7 +3,7 @@ package com.tuco.draughts.game;
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.BoardCreator;
 import com.tuco.draughts.board.util.Coordinate;
-import com.tuco.draughts.game.util.DraughtsSimpleHeuristic;
+import com.tuco.draughts.game.heuristic.Heuristic;
 import com.tuco.draughts.game.util.Player;
 import com.tuco.draughts.movement.MovementHelper;
 import com.tuco.draughts.movement.util.Movement;
@@ -28,7 +28,7 @@ public class DraughtsState extends GameStateImpl {
     private final MovementHelper movementHelper;
 
     static {
-        setHFunction(new DraughtsSimpleHeuristic());
+        setHFunction(Heuristic.SIMPLE.getValue());
     }
 
     public DraughtsState(BoardCreator boardCreator) {
@@ -53,7 +53,7 @@ public class DraughtsState extends GameStateImpl {
     }
 
     public boolean isTerminal() {
-        return board.countWhiteCheckers() == 0 || board.countBlackCheckers() == 0;
+        return board.countWhiteCheckers() == 0 || board.countBlackCheckers() == 0 || generatePossibleMoves().getMovements().isEmpty();
     }
 
     public void makeMove(Movement movement) {
@@ -83,5 +83,22 @@ public class DraughtsState extends GameStateImpl {
     @Override
     public String toString() {
         return "Checkers board:\n" + board.toString();
+    }
+
+    @Override
+    public String toGraphvizLabel() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<TABLE BORDER='0' CELLBORDER='1' CELLSPACING='0'> ");
+        int k = 0;
+        for (int i = 7; i >= 0; i--) {
+            builder.append("<TR>");
+            for (int j = 0; j < 8; j++) {
+                builder.append("<TD>" + board.getChequer(new Coordinate(j, i)).toCharacter() + " </TD>");
+                k++;
+            }
+            builder.append(" </TR>");
+        }
+        builder.append("</TABLE>");
+        return builder.toString();
     }
 }

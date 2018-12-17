@@ -1,4 +1,4 @@
-package com.tuco.draughts.game.util;
+package com.tuco.draughts.game.heuristic;
 
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.Coordinate;
@@ -8,7 +8,12 @@ import sac.StateFunction;
 
 import java.util.List;
 
-public class DraughtsSimpleHeuristic extends StateFunction {
+public class DraughtsHeuristic extends StateFunction {
+    private HeuristicCalculator calculator;
+
+    public DraughtsHeuristic(HeuristicCalculator calculator) {
+        this.calculator = calculator;
+    }
 
     @Override
     public double calculate(State state) {
@@ -23,11 +28,11 @@ public class DraughtsSimpleHeuristic extends StateFunction {
 
     private double calculateWholeGrade(Board board) {
         List<Coordinate> whiteCoordinates = board.getPlayerCoordinates(true);
-        int whiteSum = whiteCoordinates.stream().mapToInt(x -> board.getChequer(x).getValue()).sum();
+        int whiteSum = calculator.calculateValue(board, whiteCoordinates);
 
         List<Coordinate> blackCoordinates = board.getPlayerCoordinates(false);
-        int blackSum = blackCoordinates.stream().mapToInt(x -> board.getChequer(x).getValue()).sum();
+        int blackSum = calculator.calculateValue(board, blackCoordinates);
 
-        return whiteSum + blackSum;
+        return whiteSum - blackSum;
     }
 }

@@ -1,6 +1,7 @@
 package com.tuco.draughts.movement.maker;
 
 import com.tuco.draughts.game.DraughtsState;
+import com.tuco.draughts.game.heuristic.Heuristic;
 import com.tuco.draughts.movement.util.Movement;
 import com.tuco.draughts.movement.util.MovementCoder;
 import sac.StateFunction;
