@@ -3,6 +3,7 @@ package com.tuco.draughts.board.util;
 import com.tuco.draughts.board.Chequer;
 import com.tuco.draughts.movement.util.Movement;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.Arrays;
 
@@ -13,14 +14,19 @@ public class BoardBase {
 
     protected final Chequer[][] gameBoard;
 
+    @Getter
+    private final BoardBaseUtil boardUtil;
+
     protected BoardBase(BoardCreator boardCreator) {
         gameBoard = boardCreator.createBoard();
         boardSize = boardCreator.getBoardSize();
+        boardUtil = new BoardBaseUtil(this);
     }
 
     protected BoardBase(BoardBase boardBase) {
         boardSize = boardBase.boardSize;
         gameBoard = cloneBoard(boardBase.gameBoard);
+        boardUtil = new BoardBaseUtil(this);
     }
 
     private static Chequer[][] cloneBoard(Chequer[][] source) {
@@ -28,29 +34,23 @@ public class BoardBase {
     }
 
     public Chequer getChequer(Coordinate coordinate) {
-        if (isOutOfBounds(coordinate)) {
+        if (boardUtil.isOutOfBounds(coordinate)) {
             return Chequer.DISABLED;
         }
         return gameBoard[coordinate.getColumn()][coordinate.getRow()];
     }
 
     private void setChequer(Coordinate coordinate, Chequer chequer) {
-        if (isOutOfBounds(coordinate)) {
+        if (boardUtil.isOutOfBounds(coordinate)) {
             return;
         }
         gameBoard[coordinate.getColumn()][coordinate.getRow()] = chequer;
     }
 
-    private void resetChequer(Coordinate coordinate) {
-        if (!isOutOfBounds(coordinate)) {
+    private void clearChequer(Coordinate coordinate) {
+        if (!boardUtil.isOutOfBounds(coordinate)) {
             gameBoard[coordinate.getColumn()][coordinate.getRow()] = Chequer.EMPTY;
         }
-    }
-
-    private boolean isOutOfBounds(Coordinate coordinate) {
-        if (coordinate.getRow() < 0 || coordinate.getRow() >= boardSize) {
-            return true;
-        } else return coordinate.getColumn() < 0 || coordinate.getColumn() >= boardSize;
     }
 
     public void executeMove(Movement movement) {
@@ -58,8 +58,8 @@ public class BoardBase {
         Chequer startChequer = getChequer(startCoordinate);
         Coordinate finalCoordinate = movement.getLastStep();
 
-        movement.getSteps().forEach(this::resetChequer);
-        movement.getHits().forEach(this::resetChequer);
+        movement.getSteps().forEach(this::clearChequer);
+        movement.getHits().forEach(this::clearChequer);
         setChequer(finalCoordinate, startChequer);
     }
 

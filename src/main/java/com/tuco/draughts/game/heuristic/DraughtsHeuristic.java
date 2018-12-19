@@ -28,10 +28,16 @@ public class DraughtsHeuristic extends StateFunction {
 
     private double calculateWholeGrade(Board board) {
         List<Coordinate> whiteCoordinates = board.getPlayerCoordinates(true);
-        int whiteSum = calculator.calculateValue(board, whiteCoordinates);
+        double whiteSum = 0;
+        if (!whiteCoordinates.isEmpty()) {
+            whiteSum = calculator.calculateValue(board, whiteCoordinates);
+        }
 
         List<Coordinate> blackCoordinates = board.getPlayerCoordinates(false);
-        int blackSum = calculator.calculateValue(board, blackCoordinates);
+        double blackSum = 0;
+        if (!blackCoordinates.isEmpty()) {
+            blackSum = calculator.calculateValue(board, blackCoordinates);
+        }
 
         return whiteSum - blackSum;
     }

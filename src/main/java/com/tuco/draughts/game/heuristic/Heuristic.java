@@ -3,7 +3,9 @@ package com.tuco.draughts.game.heuristic;
 import sac.StateFunction;
 
 public enum Heuristic {
-    SIMPLE(createSimple());
+    SIMPLE(new DraughtsHeuristic(HeuristicCalculator.createSimple())),
+    CASUAL(new DraughtsHeuristic(HeuristicCalculator.createCasual())),
+    COMPLEX(new DraughtsHeuristic(HeuristicCalculator.createComplex()));
 
     private final StateFunction value;
 
@@ -13,10 +15,5 @@ public enum Heuristic {
 
     public StateFunction getValue() {
         return value;
-    }
-
-    private static DraughtsHeuristic createSimple() {
-        HeuristicCalculator heuristicCalculator = new HeuristicCalculator().actType();
-        return new DraughtsHeuristic(heuristicCalculator);
     }
 }
