@@ -5,6 +5,7 @@ import com.tuco.draughts.board.Chequer;
 import com.tuco.draughts.board.direction.Direction;
 import com.tuco.draughts.board.util.CaptureCoordinates;
 import com.tuco.draughts.board.util.Coordinate;
+import com.tuco.draughts.game.util.Player;
 import com.tuco.draughts.movement.util.ImpossibleMoveException;
 import com.tuco.draughts.movement.util.Movement;
 import com.tuco.draughts.movement.util.MovementContainer;
@@ -17,12 +18,12 @@ import java.util.stream.Collectors;
 
 public class KingMovementFinder implements MovementFinder {
 
-    private final boolean isWhiteTurn;
+    private final Player player;
     private final Board board;
     private final Coordinate startCoordinate;
 
-    public KingMovementFinder(boolean isWhiteTurn, Board board, Coordinate startCoordinate) {
-        this.isWhiteTurn = isWhiteTurn;
+    public KingMovementFinder(Player player, Board board, Coordinate startCoordinate) {
+        this.player = player;
         this.board = board;
         this.startCoordinate = startCoordinate;
     }
@@ -71,7 +72,7 @@ public class KingMovementFinder implements MovementFinder {
 
         if (movement.wasHitted(hitCoordinate)) {
             throw new ImpossibleMoveException(previousCoordinate, direction, "no enemy to hit");
-        } else if (hitCoordinateChequer.isEnemy(isWhiteTurn)) {
+        } else if (hitCoordinateChequer.isEnemy(player)) {
             return findPossibleCaptureTargetPositions(direction, hitCoordinate);
         } else {
             throw new ImpossibleMoveException(previousCoordinate, direction, "no enemy to hit");
@@ -81,7 +82,7 @@ public class KingMovementFinder implements MovementFinder {
     private Coordinate findHitCoordinate(Coordinate previousCoordinate, Direction direction) throws ImpossibleMoveException {
         Coordinate newCoordinate = previousCoordinate.plus(direction);
         Chequer newChequer = board.getChequer(newCoordinate);
-        if (newChequer.isEnemy(isWhiteTurn)) {
+        if (newChequer.isEnemy(player)) {
             return newCoordinate;
         } else if (newChequer.isEmpty()) {
             return findHitCoordinate(newCoordinate, direction);

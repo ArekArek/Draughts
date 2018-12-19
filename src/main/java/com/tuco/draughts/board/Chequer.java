@@ -1,5 +1,7 @@
 package com.tuco.draughts.board;
 
+import com.tuco.draughts.game.util.Player;
+
 public enum Chequer {
     WHITE, WHITE_KING, BLACK, BLACK_KING, EMPTY, DISABLED;
 
@@ -22,8 +24,9 @@ public enum Chequer {
         }
     }
 
-    public boolean isEnemy(boolean isWhiteTurn) {
-        return (isWhiteTurn && isBlack()) || (!isWhiteTurn && isWhite());
+    public boolean isEnemy(Player player) {
+        return (player == Player.WHITE && this.isBlack())
+                || (player == Player.BLACK && this.isWhite());
     }
 
     public boolean isKing() {

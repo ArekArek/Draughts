@@ -3,6 +3,7 @@ package com.tuco.draughts.board;
 import com.tuco.draughts.board.util.BoardBase;
 import com.tuco.draughts.board.util.BoardCreator;
 import com.tuco.draughts.board.util.Coordinate;
+import com.tuco.draughts.game.util.Player;
 import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,12 +24,12 @@ public class Board extends BoardBase {
         super(boardBase);
     }
 
-    public List<Coordinate> getPlayerCoordinates(boolean isWhiteTurn) {
+    public List<Coordinate> getPlayerCoordinates(Player player) {
         LOG.debug("Getting player coordinates");
         List<Coordinate> playerCoordinates = new ArrayList<>();
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if (isWhiteTurn) {
+                if (player == Player.WHITE) {
                     if (gameBoard[i][j].isWhite()) {
                         playerCoordinates.add(new Coordinate(i, j));
                     }

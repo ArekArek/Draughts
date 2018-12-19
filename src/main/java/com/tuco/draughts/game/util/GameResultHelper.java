@@ -1,9 +1,11 @@
 package com.tuco.draughts.game.util;
 
 import com.tuco.draughts.game.DraughtsState;
+import com.tuco.draughts.movement.util.Movement;
 import lombok.Getter;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class GameResultHelper {
 
@@ -38,7 +40,8 @@ public class GameResultHelper {
     private boolean isWon() {
         DraughtsState currentState = lastStates.getLast();
         Player currentPlayer = currentState.getPlayer();
-        if (currentState.generatePossibleMoves(currentPlayer == Player.WHITE).getMovements().isEmpty()) {
+        List<Movement> possibleMoves = currentState.generatePossibleMoves(currentPlayer).getMovements();
+        if (possibleMoves.isEmpty()) {
             winner = currentPlayer.getOpponent();
             return true;
         }

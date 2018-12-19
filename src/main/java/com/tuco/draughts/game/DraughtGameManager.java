@@ -44,7 +44,7 @@ public class DraughtGameManager {
         Optional.ofNullable(generalChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
 
         Movement movement;
-        if (state.isMaximizingTurnNow()) {
+        if (state.getPlayer() == Player.WHITE) {
             movement = makeDetailedTurn(playerWhite, whiteChangeTurnListener);
         } else {
             movement = makeDetailedTurn(playerBlack, blackChangeTurnListener);

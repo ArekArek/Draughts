@@ -49,11 +49,11 @@ public class DraughtsState extends GameStateImpl {
     }
 
     public MovementContainer generatePossibleMoves() {
-        return generatePossibleMoves(isMaximizingTurnNow());
+        return generatePossibleMoves(getPlayer());
     }
 
-    public MovementContainer generatePossibleMoves(boolean isWhiteTurn) {
-        return movementHelper.generatePossibleMoves(isWhiteTurn);
+    public MovementContainer generatePossibleMoves(Player player) {
+        return movementHelper.generatePossibleMoves(player);
     }
 
     public boolean isTerminal() {
@@ -67,12 +67,16 @@ public class DraughtsState extends GameStateImpl {
     public void makeMove(Movement movement) {
         board.executeMove(movement);
         board.updateKings();
-        setMaximizingTurnNow(!maximizingTurnNow);
+        swapPlayer();
         resultHelper.saveState(this);
     }
 
+    private void swapPlayer() {
+        setMaximizingTurnNow(!maximizingTurnNow);
+    }
+
     public Player getPlayer() {
-        return isMaximizingTurnNow() ? Player.WHITE : Player.BLACK;
+        return maximizingTurnNow ? Player.WHITE : Player.BLACK;
     }
 
     @Override

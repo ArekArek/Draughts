@@ -3,6 +3,7 @@ package com.tuco.draughts.game.heuristic;
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.Coordinate;
 import com.tuco.draughts.game.DraughtsState;
+import com.tuco.draughts.game.util.Player;
 import sac.State;
 import sac.StateFunction;
 
@@ -27,18 +28,18 @@ public class DraughtsHeuristic extends StateFunction {
     }
 
     private double calculateWholeGrade(Board board) {
-        List<Coordinate> whiteCoordinates = board.getPlayerCoordinates(true);
-        double whiteSum = 0;
-        if (!whiteCoordinates.isEmpty()) {
-            whiteSum = calculator.calculateValue(board, whiteCoordinates);
-        }
+        double whiteGrade = getPlayerGrade(board, Player.WHITE);
+        double blackGrade = getPlayerGrade(board, Player.BLACK);
 
-        List<Coordinate> blackCoordinates = board.getPlayerCoordinates(false);
-        double blackSum = 0;
-        if (!blackCoordinates.isEmpty()) {
-            blackSum = calculator.calculateValue(board, blackCoordinates);
-        }
+        return whiteGrade - blackGrade;
+    }
 
-        return whiteSum - blackSum;
+    private double getPlayerGrade(Board board, Player player) {
+        List<Coordinate> coordinates = board.getPlayerCoordinates(player);
+        double grade = 0;
+        if (!coordinates.isEmpty()) {
+            grade = calculator.calculateValue(board, coordinates);
+        }
+        return grade;
     }
 }

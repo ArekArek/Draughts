@@ -6,6 +6,7 @@ import com.tuco.draughts.board.direction.Direction;
 import com.tuco.draughts.board.direction.VerticalDirection;
 import com.tuco.draughts.board.util.CaptureCoordinates;
 import com.tuco.draughts.board.util.Coordinate;
+import com.tuco.draughts.game.util.Player;
 import com.tuco.draughts.movement.util.ImpossibleMoveException;
 import com.tuco.draughts.movement.util.Movement;
 import com.tuco.draughts.movement.util.MovementContainer;
@@ -17,12 +18,12 @@ import java.util.stream.Collectors;
 
 public class CasualMovementFinder implements MovementFinder {
 
-    private final boolean isWhiteTurn;
+    private final Player player;
     private final Board board;
     private final Coordinate startCoordinate;
 
-    public CasualMovementFinder(boolean isWhiteTurn, Board board, Coordinate startCoordinate) {
-        this.isWhiteTurn = isWhiteTurn;
+    public CasualMovementFinder(Player player, Board board, Coordinate startCoordinate) {
+        this.player = player;
         this.board = board;
         this.startCoordinate = startCoordinate;
     }
@@ -41,7 +42,7 @@ public class CasualMovementFinder implements MovementFinder {
     }
 
     private MovementContainer findNormalGeneralMoves() {
-        VerticalDirection verticalDirection = isWhiteTurn ? VerticalDirection.UP : VerticalDirection.DOWN;
+        VerticalDirection verticalDirection = (player == Player.WHITE) ? VerticalDirection.UP : VerticalDirection.DOWN;
         Set<Direction> horizontalDirections = Direction.getAllHorizontalDirections(verticalDirection);
         List<Movement> possibleNormalMoves = horizontalDirections.stream()
                 .map(this::findNormalDirectMoves)
@@ -82,7 +83,7 @@ public class CasualMovementFinder implements MovementFinder {
         Coordinate hitCoordinate = previousCoordinate.plus(direction);
 
         Chequer hitCoordinateChequer = board.getChequer(hitCoordinate);
-        if (hitCoordinateChequer.isEnemy(isWhiteTurn)) {
+        if (hitCoordinateChequer.isEnemy(player)) {
             Coordinate newCoordinate = hitCoordinate.plus(direction);
 
             if (movement.wasHitted(hitCoordinate)) {
