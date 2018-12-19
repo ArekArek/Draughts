@@ -1,6 +1,7 @@
 package com.tuco.draughts.game;
 
 import com.tuco.draughts.game.util.ChangeTurnListener;
+import com.tuco.draughts.game.util.Player;
 import com.tuco.draughts.movement.maker.MoveStoppedException;
 import com.tuco.draughts.movement.maker.MovementMaker;
 import com.tuco.draughts.movement.util.Movement;
@@ -64,5 +65,9 @@ public class DraughtGameManager {
     public void stopGame() {
         playerWhite.stop();
         playerBlack.stop();
+    }
+
+    public Player getWinner() {
+        return state.getWinner();
     }
 }

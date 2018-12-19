@@ -15,6 +15,7 @@ public class BoardBase {
     protected final Chequer[][] gameBoard;
 
     @Getter
+    @EqualsAndHashCode.Exclude
     private final BoardBaseUtil boardUtil;
 
     protected BoardBase(BoardCreator boardCreator) {

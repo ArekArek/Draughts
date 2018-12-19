@@ -4,6 +4,7 @@ import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.BoardCreator;
 import com.tuco.draughts.board.util.Coordinate;
 import com.tuco.draughts.game.heuristic.Heuristic;
+import com.tuco.draughts.game.util.GameResultHelper;
 import com.tuco.draughts.game.util.Player;
 import com.tuco.draughts.movement.MovementHelper;
 import com.tuco.draughts.movement.util.Movement;
@@ -17,6 +18,7 @@ import sac.game.GameStateImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DraughtsState extends GameStateImpl {
 
@@ -26,6 +28,7 @@ public class DraughtsState extends GameStateImpl {
     private final Board board;
 
     private final MovementHelper movementHelper;
+    private final GameResultHelper resultHelper;
 
     static {
         setHFunction(Heuristic.SIMPLE.getValue());
@@ -34,31 +37,38 @@ public class DraughtsState extends GameStateImpl {
     public DraughtsState(BoardCreator boardCreator) {
         this.board = new Board(boardCreator);
         this.movementHelper = new MovementHelper(board);
+        this.resultHelper = new GameResultHelper(this);
         setMaximizingTurnNow(true);
     }
 
-    private DraughtsState(DraughtsState parent) {
+    public DraughtsState(DraughtsState parent) {
         this.board = new Board(parent.board);
         this.movementHelper = new MovementHelper(board);
+        this.resultHelper = new GameResultHelper(parent.resultHelper);
         setMaximizingTurnNow(parent.maximizingTurnNow);
     }
 
-    private void endTurn() {
-        board.updateKings();
-        setMaximizingTurnNow(!maximizingTurnNow);
+    public MovementContainer generatePossibleMoves() {
+        return generatePossibleMoves(isMaximizingTurnNow());
     }
 
-    public MovementContainer generatePossibleMoves() {
-        return movementHelper.generatePossibleMoves(isMaximizingTurnNow());
+    public MovementContainer generatePossibleMoves(boolean isWhiteTurn) {
+        return movementHelper.generatePossibleMoves(isWhiteTurn);
     }
 
     public boolean isTerminal() {
-        return board.countWhiteCheckers() == 0 || board.countBlackCheckers() == 0 || generatePossibleMoves().getMovements().isEmpty();
+        return resultHelper.isGameOver();
+    }
+
+    public Player getWinner() {
+        return resultHelper.getWinner();
     }
 
     public void makeMove(Movement movement) {
         board.executeMove(movement);
-        endTurn();
+        board.updateKings();
+        setMaximizingTurnNow(!maximizingTurnNow);
+        resultHelper.saveState(this);
     }
 
     public Player getPlayer() {
@@ -83,6 +93,19 @@ public class DraughtsState extends GameStateImpl {
     @Override
     public String toString() {
         return "Checkers board:\n" + board.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DraughtsState that = (DraughtsState) o;
+        return Objects.equals(board, that.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board);
     }
 
     @Override

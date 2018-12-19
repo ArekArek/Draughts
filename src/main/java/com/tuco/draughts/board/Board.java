@@ -3,13 +3,14 @@ package com.tuco.draughts.board;
 import com.tuco.draughts.board.util.BoardBase;
 import com.tuco.draughts.board.util.BoardCreator;
 import com.tuco.draughts.board.util.Coordinate;
+import lombok.EqualsAndHashCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 public class Board extends BoardBase {
 
     private final static Logger LOG = LogManager.getLogger(Board.class);
@@ -20,18 +21,6 @@ public class Board extends BoardBase {
 
     public Board(BoardBase boardBase) {
         super(boardBase);
-    }
-
-    public long countWhiteCheckers() {
-        long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Chequer::isWhite).count();
-        LOG.debug("Counting white, result: " + result);
-        return result;
-    }
-
-    public long countBlackCheckers() {
-        long result = Arrays.stream(gameBoard).flatMap(Arrays::stream).filter(Chequer::isBlack).count();
-        LOG.debug("Counting black, result: " + result);
-        return result;
     }
 
     public List<Coordinate> getPlayerCoordinates(boolean isWhiteTurn) {

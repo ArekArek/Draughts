@@ -1,15 +1,28 @@
 package com.tuco.draughts.game.util;
 
 public enum Player {
-    WHITE(true), BLACK(false);
+    WHITE("white"), BLACK("black"), BOTH("both");
 
-    private boolean value;
+    private String value;
 
-    Player(boolean value) {
+    Player(String value) {
         this.value = value;
     }
 
-    public boolean isValue() {
+    public String getValue() {
         return value;
+    }
+
+    public Player getOpponent() {
+        switch (this) {
+            case WHITE:
+                return BLACK;
+            case BLACK:
+                return WHITE;
+            case BOTH:
+                return BOTH;
+            default:
+                return null;
+        }
     }
 }
