@@ -2,24 +2,26 @@ package com.tuco.draughts.game.heuristic;
 
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.Coordinate;
+import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+@Builder
 public class HeuristicCalculator {
 
-    private static final double PAWN_VALUE = 1;
-    private static final double KING_VALUE = 2;
-    private static final double SAFE_FACTOR = 0.05;
-    private static final double DISTANCE_FACTOR = -0.02;
-    private static final double FIRST_LINE_VALUE = 0.05;
-    private static final double DEFENDER_KING_VALUE = 0.05;
-    private static final double KING_MAIN_DIAGONAL = 0.05;
-    private static final double TRIANGLE_VALUE = 0.05;
-    private static final double OREO_VALUE = 0.04;
-    private static final double BRIDGE_VALUE = 0.03;
-    private static final double DOG_VALUE = 0.03;
+    private final double PAWN_VALUE;
+    private final double KING_VALUE;
+    private final double SAFE_FACTOR;
+    private final double DISTANCE_FACTOR;
+    private final double FIRST_LINE_VALUE;
+    private final double DEFENDER_KING_VALUE;
+    private final double KING_MAIN_DIAGONAL;
+    private final double TRIANGLE_VALUE;
+    private final double OREO_VALUE;
+    private final double BRIDGE_VALUE;
+    private final double DOG_VALUE;
 
     private final List<BiFunction<Board, Coordinate, Double>> multipleMethods = new ArrayList<>();
     private final List<BiFunction<Board, Boolean, Double>> singleMethods = new ArrayList<>();
@@ -38,20 +40,20 @@ public class HeuristicCalculator {
         return multipleValues + singleValues;
     }
 
-    public static HeuristicCalculator createSimple() {
-        return new HeuristicCalculator().actType();
+    public static HeuristicCalculator createSimple(HeuristicCalculator heuristicCalculator) {
+        return heuristicCalculator.actType();
     }
 
-    public static HeuristicCalculator createCasual() {
-        return new HeuristicCalculator()
+    public static HeuristicCalculator createCasual(HeuristicCalculator heuristicCalculator) {
+        return heuristicCalculator
                 .actType()
                 .actSafe()
                 .actDistance()
                 .actFirstLine();
     }
 
-    public static HeuristicCalculator createComplex() {
-        return new HeuristicCalculator()
+    public static HeuristicCalculator createComplex(HeuristicCalculator heuristicCalculator) {
+        return heuristicCalculator
                 .actType()
                 .actSafe()
                 .actDistance()
