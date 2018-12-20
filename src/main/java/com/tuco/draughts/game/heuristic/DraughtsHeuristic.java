@@ -20,11 +20,17 @@ public class DraughtsHeuristic extends StateFunction {
     public double calculate(State state) {
         DraughtsState draughtsState = (DraughtsState) state;
         if (draughtsState.isTerminal()) {
-            double wholeGrade = calculateWholeGrade(draughtsState.getBoard());
-            return (wholeGrade > 0) ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
-        } else {
-            return calculateWholeGrade(draughtsState.getBoard());
+            Player winner = draughtsState.getWinner();
+            switch (winner) {
+                case WHITE:
+                    return Double.POSITIVE_INFINITY;
+                case BLACK:
+                    return Double.NEGATIVE_INFINITY;
+                case BOTH:
+                    return 0.0;
+            }
         }
+        return calculateWholeGrade(draughtsState.getBoard());
     }
 
     private double calculateWholeGrade(Board board) {
