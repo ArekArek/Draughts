@@ -38,6 +38,8 @@ public class GameResultHelper {
         lastStates.removeIf(b -> lastStates.size() > QUEUE_SIZE);
         if (isKingOrHitMovement(state, movement)) {
             kingOrHitMovementCounter++;
+        } else {
+            kingOrHitMovementCounter = 0;
         }
     }
 

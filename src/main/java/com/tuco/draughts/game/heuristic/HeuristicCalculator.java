@@ -15,6 +15,7 @@ public class HeuristicCalculator {
     private static final double DISTANCE_FACTOR = -0.02;
     private static final double FIRST_LINE_VALUE = 0.05;
     private static final double DEFENDER_KING_VALUE = 0.05;
+    private static final double KING_MAIN_DIAGONAL = 0.05;
     private static final double TRIANGLE_VALUE = 0.05;
     private static final double OREO_VALUE = 0.04;
     private static final double BRIDGE_VALUE = 0.03;
@@ -56,6 +57,7 @@ public class HeuristicCalculator {
                 .actDistance()
                 .actFirstLine()
                 .actKingDefender()
+                .actKingDiagonal()
                 .actTrianglePattern()
                 .actOreoPattern()
                 .actBridgePattern()
@@ -104,6 +106,17 @@ public class HeuristicCalculator {
         multipleMethods.add((b, c) -> {
             if (b.getChequer(c).isKing() && b.getBoardUtil().isDefender(c)) {
                 return DEFENDER_KING_VALUE;
+            } else {
+                return 0.0;
+            }
+        });
+        return this;
+    }
+
+    public HeuristicCalculator actKingDiagonal() {
+        multipleMethods.add((b, c) -> {
+            if (b.getChequer(c).isKing() && c.getRow() == c.getColumn()) {
+                return KING_MAIN_DIAGONAL;
             } else {
                 return 0.0;
             }
