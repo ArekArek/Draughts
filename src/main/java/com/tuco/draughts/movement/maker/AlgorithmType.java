@@ -6,15 +6,18 @@ import sac.game.MinMax;
 import sac.game.Scout;
 
 public enum AlgorithmType {
-    MINMAX(new MinMax()), SCOUT(new Scout()), ALPHABETA(new AlphaBetaPruning());
+    MINMAX, SCOUT, ALPHABETA;
 
-    private final GameSearchAlgorithm value;
-
-    AlgorithmType(GameSearchAlgorithm value) {
-        this.value = value;
-    }
-
-    public GameSearchAlgorithm getValue() {
-        return value;
+    public GameSearchAlgorithm createAlgorithm() {
+        switch (this) {
+            case MINMAX:
+                return new MinMax();
+            case ALPHABETA:
+                return new AlphaBetaPruning();
+            case SCOUT:
+                return new Scout();
+            default:
+                return new MinMax();
+        }
     }
 }

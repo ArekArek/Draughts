@@ -22,7 +22,7 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
     public AIMovementMaker(DraughtsState draughtsState, AlgorithmType algorithmType, Heuristic heuristic) {
         this.draughtsState = draughtsState;
         this.heuristic = heuristic.getValue();
-        this.algorithm = algorithmType.getValue();
+        this.algorithm = algorithmType.createAlgorithm();
 
         algorithm.setConfigurator(this);
     }
