@@ -68,7 +68,7 @@ public class DraughtsState extends GameStateImpl {
         board.executeMove(movement);
         board.updateKings();
         swapPlayer();
-        resultHelper.saveState(this);
+        resultHelper.saveState(this, movement);
     }
 
     private void swapPlayer() {
