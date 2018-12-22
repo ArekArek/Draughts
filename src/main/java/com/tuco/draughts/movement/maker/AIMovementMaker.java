@@ -20,8 +20,12 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
     private static final Random random = new Random();
 
     public AIMovementMaker(DraughtsState draughtsState, AlgorithmType algorithmType, Heuristic heuristic) {
+        this(draughtsState, algorithmType, heuristic.getValue());
+    }
+
+    public AIMovementMaker(DraughtsState draughtsState, AlgorithmType algorithmType, StateFunction stateFunction) {
         this.draughtsState = draughtsState;
-        this.heuristic = heuristic.getValue();
+        this.heuristic = stateFunction;
         this.algorithm = algorithmType.createAlgorithm();
 
         algorithm.setConfigurator(this);
