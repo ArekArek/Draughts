@@ -3,11 +3,13 @@ package com.tuco.draughts.game.heuristic;
 import com.tuco.draughts.board.Board;
 import com.tuco.draughts.board.util.Coordinate;
 import lombok.Builder;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+@ToString
 @Builder
 public class HeuristicCalculator {
 

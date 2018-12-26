@@ -14,10 +14,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicInteger;
 
 class App {
 
@@ -26,10 +26,11 @@ class App {
     }
 
     static class Params {
-        static final int iterationsPerColor = 20;
-        static final int statusPeriod = 2_000;
+        static final int iterationsPerColor = 640;
+        static final double algorithmDepth = 0.5;
+        static final int statusPeriod = 10_000;
         static final double pawnValue = 1;
-        static final double kingMin = 1.6, kingMax = 2.2, kingStep = 0.02;
+        static final double kingMin = 0.0, kingMax = 12.0, kingStep = 0.02;
         //        static final double safeFactor;
 //        static final double distanceFactor;
 //        static final double firstLineValue;
@@ -45,30 +46,32 @@ class App {
         static double evaluateIterations() {
             return (kingMax - kingMin) / kingStep;
         }
-    }
 
-    public static void start() {
-        LocalDateTime startDate = LocalDateTime.now();
-        System.out.println("START time = " + startDate);
-        HeuristicCalculator constantCalculator = HeuristicCalculator.builder()
+        static HeuristicCalculator constantCalculator = HeuristicCalculator.builder()
                 .PAWN_VALUE(1)
                 .KING_VALUE(2)
                 .build()
                 .actType();
 
-        DraughtsHeuristic constantHeuristic = new DraughtsHeuristic(constantCalculator);
+        static DraughtsHeuristic constantHeuristic = new DraughtsHeuristic(constantCalculator);
+    }
+
+    public static void start() {
+        LocalDateTime startDate = LocalDateTime.now();
+        System.out.println("START time = " + startDate);
+
         long start = System.nanoTime();
 
         Thread threadOne = new Thread(() -> {
             try {
-                processOneTask(constantHeuristic, true);
+                processOneTask(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         Thread threadTwo = new Thread(() -> {
             try {
-                processOneTask(constantHeuristic, false);
+                processOneTask(false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -101,16 +104,12 @@ class App {
         System.out.println("total time = " + elapsedTime / 1_000_000_000 / 60 + "m " + elapsedTime / 1_000_000_000 % 60 + "s");
     }
 
-    private static void processOneTask(DraughtsHeuristic constantHeuristic, boolean isFirst) throws IOException {
+    private static void processOneTask(boolean isFirst) throws IOException {
         DraughtsHeuristic customHeuristic;
-
-        AtomicInteger wonCount, loseCount, drawCount;
 
         Writer writer = Files.newBufferedWriter(Paths.get(isFirst ? "researchA.csv" : "researchB.csv"));
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
-                "won",
-                "lose",
-                "draw",
+                "wonPercent",
                 "pawn",
                 "king"));
 
@@ -123,30 +122,39 @@ class App {
                     .actType();
             customHeuristic = new DraughtsHeuristic(heuristicCalculator);
 
-            wonCount = new AtomicInteger(0);
-            loseCount = new AtomicInteger(0);
-            drawCount = new AtomicInteger(0);
-
             //white is constant
-            processOnePlayer(constantHeuristic, customHeuristic, loseCount, wonCount, drawCount);
+            double whitePercent = processOnePlayer(customHeuristic, true);
             //white is complex
-            processOnePlayer(customHeuristic, constantHeuristic, wonCount, loseCount, drawCount);
+            double blackPercent = processOnePlayer(customHeuristic, false);
 
             Params.allIterationsCounter++;
-            csvPrinter.printRecord(wonCount, loseCount, drawCount, Params.pawnValue, kingIteration);
+            csvPrinter.printRecord(String.format("%.2f%%", (whitePercent + blackPercent) / 2), Params.pawnValue, String.format("%.2f", kingIteration));
         }
+        csvPrinter.println();
+        csvPrinter.print(LocalDate.now());
+        csvPrinter.print("iterations per color = " + Params.iterationsPerColor);
+        csvPrinter.print("depth  = " + Params.algorithmDepth);
+        csvPrinter.print("enemy  = " + Params.constantCalculator.toString());
         csvPrinter.flush();
     }
 
-    private static void processOnePlayer(DraughtsHeuristic whiteHeuristic, DraughtsHeuristic blackHeuristic, AtomicInteger whiteWons, AtomicInteger blackWons, AtomicInteger draws) {
+    private static double processOnePlayer(DraughtsHeuristic complexHeuristic, boolean isWhite) {
+        int whiteWons = 0;
+        int blackWons = 0;
         for (int colorIteration = 0; colorIteration < Params.iterationsPerColor; colorIteration++) {
             DraughtsState state = new DraughtsState(new StandardBoardCreator());
 
-            AIMovementMaker whiteAI = new AIMovementMaker(state, AlgorithmType.MINMAX, whiteHeuristic);
-            whiteAI.setDepthLimit(1.5);
-
-            AIMovementMaker blackAI = new AIMovementMaker(state, AlgorithmType.MINMAX, blackHeuristic);
-            blackAI.setDepthLimit(1.5);
+            AIMovementMaker whiteAI;
+            AIMovementMaker blackAI;
+            if (isWhite) {
+                whiteAI = new AIMovementMaker(state, AlgorithmType.MINMAX, complexHeuristic);
+                blackAI = new AIMovementMaker(state, AlgorithmType.MINMAX, Params.constantHeuristic);
+            } else {
+                whiteAI = new AIMovementMaker(state, AlgorithmType.MINMAX, Params.constantHeuristic);
+                blackAI = new AIMovementMaker(state, AlgorithmType.MINMAX, complexHeuristic);
+            }
+            whiteAI.setDepthLimit(Params.algorithmDepth);
+            blackAI.setDepthLimit(Params.algorithmDepth);
 
             DraughtGameManager gameManager = DraughtGameManager.builder()
                     .state(state)
@@ -158,19 +166,18 @@ class App {
 
             switch (gameManager.getWinner()) {
                 case BLACK:
-                    blackWons.incrementAndGet();
+                    blackWons++;
                     break;
                 case WHITE:
-                    whiteWons.incrementAndGet();
-                    break;
-                case BOTH:
-                    draws.incrementAndGet();
+                    whiteWons++;
                     break;
             }
         }
+        double allWons = whiteWons + blackWons;
+        return (isWhite ? whiteWons : blackWons) / allWons;
     }
 
     private static void presentStatus() {
-        System.out.format("%.2f%%%n", Params.allIterationsCounter / Params.allIterationsCount);
+        System.out.format("%.2f%%%n", Params.allIterationsCounter * 100 / Params.allIterationsCount);
     }
 }
