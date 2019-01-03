@@ -26,17 +26,17 @@ class App {
     }
 
     static class Params {
-        static final int iterationsPerColor = 640;
+        static final int iterationsPerColor = 64;
         static final double algorithmDepth = 0.5;
         static final int statusPeriod = 10_000;
         static final double pawnValue = 1;
-        static final double kingMin = 0.0, kingMax = 12.0, kingStep = 0.02;
-        //        static final double safeFactor;
-//        static final double distanceFactor;
-//        static final double firstLineValue;
-//        static final double defenderKingValue;
-//        static final double kingMainDiagonal;
-//        static final double triangleValue;
+        static final double kingMin = 1.0, kingMax = 3.0, kingStep = 0.1;
+        static final double safeMin = 0.0, safeMax = 0.2, safeStep = 0.05;
+        static final double distanceMin = 0.0, distanceMax = 0.1, distanceStep = 0.02;
+        static final double firstLineMin = 0.0, firstLineMax = 0.5, firstLineStep = 0.1;
+        static final double defenderKingMin = 0.0, defenderKingMax = 0.2, defenderKingStep = 0.05;
+        static final double kingDiagonalMin = 0.0, kingDiagonalMax = 0.2, kingDiagonalStep = 0.05;
+        //        static final double triangleValue;
 //        static final double oreoValue;
 //        static final double bridgeValue;
 //        static final double dogValue;
@@ -44,7 +44,12 @@ class App {
         static final double allIterationsCount = evaluateIterations();
 
         static double evaluateIterations() {
-            return (kingMax - kingMin) / kingStep;
+            return ((kingMax - kingMin) / kingStep) *
+                    ((safeMax - safeMin) / safeStep) *
+                    ((distanceMax - distanceMin) / distanceStep) *
+                    ((firstLineMax - firstLineMin) / firstLineStep) *
+                    ((defenderKingMax - defenderKingMin) / defenderKingStep) *
+                    ((kingDiagonalMax - kingDiagonalMin) / kingDiagonalStep);
         }
 
         static HeuristicCalculator constantCalculator = HeuristicCalculator.builder()
@@ -111,24 +116,56 @@ class App {
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
                 "wonPercent",
                 "pawn",
-                "king"));
+                "king",
+                "safe",
+                "distance",
+                "firstLine",
+                "defenderKing",
+                "kingDiagonal"));
 
         for (double kingIteration = isFirst ? Params.kingMin : (Params.kingMax + Params.kingMin) / 2;
-             kingIteration <= (isFirst ? (Params.kingMax + Params.kingMin) / 2 : Params.kingMax); kingIteration += Params.kingStep) {
-            HeuristicCalculator heuristicCalculator = HeuristicCalculator.builder()
-                    .PAWN_VALUE(Params.pawnValue)
-                    .KING_VALUE(kingIteration)
-                    .build()
-                    .actType();
-            customHeuristic = new DraughtsHeuristic(heuristicCalculator);
+             kingIteration < (isFirst ? (Params.kingMax + Params.kingMin) / 2 : Params.kingMax); kingIteration += Params.kingStep) {
+            for (double safeIteration = Params.safeMin; safeIteration < Params.safeMax; safeIteration += Params.distanceStep) {
+                for (double distanceIteration = Params.distanceMin; distanceIteration < Params.distanceMax; distanceIteration += Params.distanceStep) {
+                    for (double firstLineIteration = Params.firstLineMin; firstLineIteration < Params.firstLineMax; firstLineIteration += Params.firstLineStep) {
+                        for (double defenderKingIteration = Params.defenderKingMin; defenderKingIteration < Params.defenderKingMax; defenderKingIteration += Params.defenderKingStep) {
+                            for (double kingDiagonalIteration = Params.kingDiagonalMin; kingDiagonalIteration < Params.kingDiagonalMax; kingDiagonalIteration += Params.kingDiagonalStep) {
+                                HeuristicCalculator heuristicCalculator = HeuristicCalculator.builder()
+                                        .PAWN_VALUE(Params.pawnValue)
+                                        .KING_VALUE(kingIteration)
+                                        .SAFE_FACTOR(safeIteration)
+                                        .DISTANCE_FACTOR(distanceIteration)
+                                        .FIRST_LINE_VALUE(firstLineIteration)
+                                        .DEFENDER_KING_VALUE(defenderKingIteration)
+                                        .KING_MAIN_DIAGONAL(kingDiagonalIteration)
+                                        .build()
+                                        .actType()
+                                        .actSafe()
+                                        .actDistance()
+                                        .actFirstLine()
+                                        .actKingDefender()
+                                        .actKingDiagonal();
+                                customHeuristic = new DraughtsHeuristic(heuristicCalculator);
 
-            //white is constant
-            double whitePercent = processOnePlayer(customHeuristic, true);
-            //white is complex
-            double blackPercent = processOnePlayer(customHeuristic, false);
+                                //white is constant
+                                double whitePercent = processOnePlayer(customHeuristic, true);
+                                //white is complex
+                                double blackPercent = processOnePlayer(customHeuristic, false);
 
-            Params.allIterationsCounter++;
-            csvPrinter.printRecord(String.format("%.2f%%", (whitePercent + blackPercent) / 2), Params.pawnValue, String.format("%.2f", kingIteration));
+                                Params.allIterationsCounter++;
+                                csvPrinter.printRecord(String.format("%.2f%%", (whitePercent + blackPercent) / 2),
+                                        Params.pawnValue,
+                                        String.format("%.2f", kingIteration),
+                                        String.format("%.2f", safeIteration),
+                                        String.format("%.2f", distanceIteration),
+                                        String.format("%.2f", firstLineIteration),
+                                        String.format("%.2f", defenderKingIteration),
+                                        String.format("%.2f", kingDiagonalIteration));
+                            }
+                        }
+                    }
+                }
+            }
         }
         csvPrinter.println();
         csvPrinter.print(LocalDate.now());
@@ -178,6 +215,6 @@ class App {
     }
 
     private static void presentStatus() {
-        System.out.format("%.2f%%%n", Params.allIterationsCounter * 100 / Params.allIterationsCount);
+        System.out.format("%.9f%%%n", Params.allIterationsCounter * 100 / Params.allIterationsCount);
     }
 }
