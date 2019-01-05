@@ -2,7 +2,7 @@ package com.tuco.draughts.board.util;
 
 import com.tuco.draughts.board.Chequer;
 
-public class StandardBoardCreator implements BoardCreator {
+public class Draughts64BoardCreator implements BoardCreator {
 
     private static final int BOARD_SIZE = 8;
 

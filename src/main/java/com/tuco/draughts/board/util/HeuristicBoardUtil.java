@@ -4,14 +4,8 @@ import com.tuco.draughts.board.Chequer;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class BoardBaseUtil {
+public class HeuristicBoardUtil {
     private BoardBase board;
-
-    public boolean isOutOfBounds(Coordinate coordinate) {
-        if (coordinate.getRow() < 0 || coordinate.getRow() >= board.boardSize) {
-            return true;
-        } else return coordinate.getColumn() < 0 || coordinate.getColumn() >= board.boardSize;
-    }
 
     public boolean isOnBounds(Coordinate coordinate) {
         if (coordinate.getRow() == 0 || coordinate.getRow() == board.boardSize - 1) {

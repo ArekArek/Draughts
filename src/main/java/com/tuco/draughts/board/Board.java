@@ -3,8 +3,11 @@ package com.tuco.draughts.board;
 import com.tuco.draughts.board.util.BoardBase;
 import com.tuco.draughts.board.util.BoardCreator;
 import com.tuco.draughts.board.util.Coordinate;
+import com.tuco.draughts.board.util.HeuristicBoardUtil;
 import com.tuco.draughts.game.util.Player;
+import com.tuco.draughts.movement.util.Movement;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,12 +19,18 @@ public class Board extends BoardBase {
 
     private final static Logger LOG = LogManager.getLogger(Board.class);
 
+    @Getter
+    @EqualsAndHashCode.Exclude
+    private final HeuristicBoardUtil heuristicUtil;
+
     public Board(BoardCreator boardCreator) {
         super(boardCreator);
+        heuristicUtil = new HeuristicBoardUtil(this);
     }
 
     public Board(BoardBase boardBase) {
         super(boardBase);
+        heuristicUtil = new HeuristicBoardUtil(this);
     }
 
     public List<Coordinate> getPlayerCoordinates(Player player) {
@@ -49,5 +58,15 @@ public class Board extends BoardBase {
                 gameBoard[i][boardSize - 1] = Chequer.WHITE_KING;
             }
         }
+    }
+
+    public void executeMove(Movement movement) {
+        Coordinate startCoordinate = movement.getFirstStep();
+        Chequer startChequer = getChequer(startCoordinate);
+        Coordinate finalCoordinate = movement.getLastStep();
+
+        movement.getSteps().forEach(this::clearChequer);
+        movement.getHits().forEach(this::clearChequer);
+        setChequer(finalCoordinate, startChequer);
     }
 }

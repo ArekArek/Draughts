@@ -71,7 +71,7 @@ public class HeuristicCalculator {
 
     public HeuristicCalculator actSafe() {
         multipleMethods.add((b, c) -> {
-            if (b.getBoardUtil().isOnBounds(c)) {
+            if (b.getHeuristicUtil().isOnBounds(c)) {
                 return SAFE_FACTOR * (b.getChequer(c).isKing() ? KING_VALUE : PAWN_VALUE);
             } else {
                 return 0.0;
@@ -85,7 +85,7 @@ public class HeuristicCalculator {
             if (b.getChequer(c).isKing()) {
                 return 0.0;
             } else {
-                return b.getBoardUtil().getDistanceToPromotion(c) * DISTANCE_FACTOR;
+                return b.getHeuristicUtil().getDistanceToPromotion(c) * DISTANCE_FACTOR;
             }
         });
         return this;
@@ -93,7 +93,7 @@ public class HeuristicCalculator {
 
     public HeuristicCalculator actFirstLine() {
         multipleMethods.add((b, c) -> {
-            if (!b.getChequer(c).isKing() && b.getBoardUtil().isOnFirstLine(c)) {
+            if (!b.getChequer(c).isKing() && b.getHeuristicUtil().isOnFirstLine(c)) {
                 return FIRST_LINE_VALUE;
             } else {
                 return 0.0;
@@ -104,7 +104,7 @@ public class HeuristicCalculator {
 
     public HeuristicCalculator actKingDefender() {
         multipleMethods.add((b, c) -> {
-            if (b.getChequer(c).isKing() && b.getBoardUtil().isDefender(c)) {
+            if (b.getChequer(c).isKing() && b.getHeuristicUtil().isDefender(c)) {
                 return DEFENDER_KING_VALUE;
             } else {
                 return 0.0;
@@ -125,22 +125,22 @@ public class HeuristicCalculator {
     }
 
     public HeuristicCalculator actTrianglePattern() {
-        singleMethods.add((b, c) -> b.getBoardUtil().isTrianglePatter(c) ? TRIANGLE_VALUE : 0);
+        singleMethods.add((b, c) -> b.getHeuristicUtil().isTrianglePatter(c) ? TRIANGLE_VALUE : 0);
         return this;
     }
 
     public HeuristicCalculator actOreoPattern() {
-        singleMethods.add((b, c) -> b.getBoardUtil().isOreoPatter(c) ? OREO_VALUE : 0);
+        singleMethods.add((b, c) -> b.getHeuristicUtil().isOreoPatter(c) ? OREO_VALUE : 0);
         return this;
     }
 
     public HeuristicCalculator actBridgePattern() {
-        singleMethods.add((b, c) -> b.getBoardUtil().isBridgePatter(c) ? BRIDGE_VALUE : 0);
+        singleMethods.add((b, c) -> b.getHeuristicUtil().isBridgePatter(c) ? BRIDGE_VALUE : 0);
         return this;
     }
 
     public HeuristicCalculator actDogPattern() {
-        singleMethods.add((b, c) -> b.getBoardUtil().isDogPatter(c) ? DOG_VALUE : 0);
+        singleMethods.add((b, c) -> b.getHeuristicUtil().isDogPatter(c) ? DOG_VALUE : 0);
         return this;
     }
 

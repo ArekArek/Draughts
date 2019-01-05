@@ -24,11 +24,7 @@ public class DraughtGameManager {
     private ChangeTurnListener whiteChangeTurnListener;
     private ChangeTurnListener blackChangeTurnListener;
 
-    @Getter
-    private boolean playing = false;
-
     public void play() {
-        playing = true;
         while (!state.isTerminal()) {
             try {
                 makeTurn();
@@ -37,7 +33,6 @@ public class DraughtGameManager {
                 break;
             }
         }
-        playing = false;
     }
 
     private void makeTurn() throws MoveStoppedException {

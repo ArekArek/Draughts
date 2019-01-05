@@ -1,6 +1,6 @@
 package com.tuco.draughts;
 
-import com.tuco.draughts.board.util.StandardBoardCreator;
+import com.tuco.draughts.board.util.Draughts64BoardCreator;
 import com.tuco.draughts.console.ConsoleMovementInformator;
 import com.tuco.draughts.console.ConsolePositionLoader;
 import com.tuco.draughts.game.DraughtGameManager;
@@ -15,7 +15,7 @@ import com.tuco.draughts.movement.maker.MovementMaker;
 class App {
 
     public static void playGame() {
-        DraughtsState state = new DraughtsState(new StandardBoardCreator());
+        DraughtsState state = new DraughtsState(new Draughts64BoardCreator());
 
         AIMovementMaker aiSimple = new AIMovementMaker(state, AlgorithmType.ALPHABETA, Heuristic.SIMPLE);
         aiSimple.setDepthLimit(1.5);
