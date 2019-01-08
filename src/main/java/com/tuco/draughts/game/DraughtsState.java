@@ -29,6 +29,7 @@ public class DraughtsState extends GameStateImpl {
 
     private final MovementHelper movementHelper;
     private final GameResultHelper resultHelper;
+    private boolean isGameFinished;
 
     static {
         setHFunction(Heuristic.SIMPLE.getValue());
@@ -57,7 +58,7 @@ public class DraughtsState extends GameStateImpl {
     }
 
     public boolean isTerminal() {
-        return resultHelper.isGameOver();
+        return isGameFinished || resultHelper.isGameOver();
     }
 
     public Player getWinner() {
@@ -73,6 +74,10 @@ public class DraughtsState extends GameStateImpl {
 
     private void swapPlayer() {
         setMaximizingTurnNow(!maximizingTurnNow);
+    }
+
+    public void finishGame() {
+        isGameFinished = true;
     }
 
     public Player getPlayer() {

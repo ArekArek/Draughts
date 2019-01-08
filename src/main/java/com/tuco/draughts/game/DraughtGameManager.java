@@ -58,6 +58,7 @@ public class DraughtGameManager {
     }
 
     public void stopGame() {
+        state.finishGame();
         playerWhite.stop();
         playerBlack.stop();
     }
