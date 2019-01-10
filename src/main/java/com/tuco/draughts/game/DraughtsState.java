@@ -92,6 +92,11 @@ public class DraughtsState extends GameStateImpl {
         return children;
     }
 
+    @Override
+    public boolean isQuiet() {
+        return !generatePossibleMoves().isCaptured();
+    }
+
     private GameState generateChild(Movement movement) {
         DraughtsState child = new DraughtsState(this);
         child.makeMove(movement);

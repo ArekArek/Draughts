@@ -25,6 +25,7 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
         this.algorithm = algorithmType.createAlgorithm();
 
         algorithm.setConfigurator(this);
+        setQuiescenceOn(false);
     }
 
     @Override

@@ -14,6 +14,7 @@ public class MovementContainer {
     @Getter
     private List<Movement> movements;
 
+    @Getter
     @Setter
     private boolean captured;
 
