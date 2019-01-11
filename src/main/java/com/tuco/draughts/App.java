@@ -7,6 +7,7 @@ import com.tuco.draughts.game.DraughtGameManager;
 import com.tuco.draughts.game.DraughtsState;
 import com.tuco.draughts.game.heuristic.Heuristic;
 import com.tuco.draughts.game.util.ChangeTurnListener;
+import com.tuco.draughts.movement.maker.AIMovementDescription;
 import com.tuco.draughts.movement.maker.AIMovementMaker;
 import com.tuco.draughts.movement.maker.AlgorithmType;
 import com.tuco.draughts.movement.maker.HumanMovementMaker;
@@ -32,6 +33,12 @@ class App {
                     @Override
                     public void beforeTurn() {
                         System.out.println(state);
+                    }
+
+                    @Override
+                    public void afterAITurn(AIMovementDescription movementDescription) {
+                        System.out.println(movementDescription.getDepthReached());
+                        System.out.println(movementDescription.getDuration());
                     }
                 })
                 .build();

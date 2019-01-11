@@ -2,6 +2,7 @@ package com.tuco.draughts.game;
 
 import com.tuco.draughts.game.util.ChangeTurnListener;
 import com.tuco.draughts.game.util.Player;
+import com.tuco.draughts.movement.maker.AIMovementMaker;
 import com.tuco.draughts.movement.maker.MoveStoppedException;
 import com.tuco.draughts.movement.maker.MovementMaker;
 import com.tuco.draughts.movement.util.Movement;
@@ -52,6 +53,11 @@ public class DraughtGameManager {
 
         Movement movement = movementMaker.takeMove();
         state.makeMove(movement);
+
+        if (movementMaker instanceof AIMovementMaker) {
+            Optional.ofNullable(generalChangeTurnListener)
+                    .ifPresent(l -> l.afterAITurn(((AIMovementMaker) movementMaker).getMovementDescription()));
+        }
 
         Optional.ofNullable(playerChangeTurnListener).ifPresent(l -> l.afterTurn(movement));
         return movement;

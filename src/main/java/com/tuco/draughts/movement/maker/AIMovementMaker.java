@@ -4,6 +4,7 @@ import com.tuco.draughts.game.DraughtsState;
 import com.tuco.draughts.game.heuristic.Heuristic;
 import com.tuco.draughts.movement.util.Movement;
 import com.tuco.draughts.movement.util.MovementCoder;
+import lombok.Getter;
 import sac.StateFunction;
 import sac.game.GameSearchAlgorithm;
 import sac.game.GameSearchConfigurator;
@@ -17,6 +18,9 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
     private final DraughtsState draughtsState;
     private final StateFunction heuristic;
     private final GameSearchAlgorithm algorithm;
+
+    @Getter
+    private AIMovementDescription movementDescription = new AIMovementDescription();
     private static final Random random = new Random();
 
     public AIMovementMaker(DraughtsState draughtsState, AlgorithmType algorithmType, Heuristic heuristic) {
@@ -42,6 +46,7 @@ public class AIMovementMaker extends GameSearchConfigurator implements MovementM
         }
 
         String bestMove = ((bestMoves.size() == 1) ? bestMoves.get(0) : drawMove(bestMoves));
+        movementDescription.setValues(algorithm, bestMove);
 
         return MovementCoder.decode(bestMove);
     }
