@@ -25,10 +25,14 @@ public class DraughtGameManager {
     private ChangeTurnListener whiteChangeTurnListener;
     private ChangeTurnListener blackChangeTurnListener;
 
+    @Getter
+    private int turnCounter = 0;
+
     public void play() {
         while (!state.isTerminal()) {
             try {
                 makeTurn();
+                turnCounter++;
             } catch (MoveStoppedException e) {
                 LOG.info("Move was stopped");
                 break;
@@ -37,7 +41,7 @@ public class DraughtGameManager {
     }
 
     private void makeTurn() throws MoveStoppedException {
-        Optional.ofNullable(generalChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
+        Optional.ofNullable(generalChangeTurnListener).ifPresent(l -> l.beforeTurn(this));
 
         Movement movement;
         if (state.getPlayer() == Player.WHITE) {
@@ -49,7 +53,7 @@ public class DraughtGameManager {
     }
 
     private Movement makeDetailedTurn(MovementMaker movementMaker, ChangeTurnListener playerChangeTurnListener) throws MoveStoppedException {
-        Optional.ofNullable(playerChangeTurnListener).ifPresent(ChangeTurnListener::beforeTurn);
+        Optional.ofNullable(playerChangeTurnListener).ifPresent(l -> l.beforeTurn(this));
 
         Movement movement = movementMaker.takeMove();
         state.makeMove(movement);

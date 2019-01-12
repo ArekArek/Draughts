@@ -31,8 +31,8 @@ class App {
                 .playerBlack(aiComplex)
                 .generalChangeTurnListener(new ChangeTurnListener() {
                     @Override
-                    public void beforeTurn() {
-                        System.out.println(state);
+                    public void beforeTurn(DraughtGameManager manager) {
+                        System.out.println(manager.getState());
                     }
 
                     @Override
