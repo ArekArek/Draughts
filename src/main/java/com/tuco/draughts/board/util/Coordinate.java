@@ -4,12 +4,10 @@ import com.tuco.draughts.board.direction.Direction;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString
 public class Coordinate {
 
     private int column;
@@ -29,5 +27,12 @@ public class Coordinate {
         int newColumn = column + direction.getHorizontalDirection().getValue();
         int newRow = row + direction.getVerticalDirection().getValue();
         return new Coordinate(newColumn, newRow);
+    }
+
+    @Override
+    public String toString() {
+        char column = (char) (this.column + 1 + 64);
+        char row = (char) (this.row + 1 + 48);
+        return "" + column + row;
     }
 }

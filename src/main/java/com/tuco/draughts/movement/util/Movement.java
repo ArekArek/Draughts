@@ -57,6 +57,19 @@ public class Movement {
         hits.add(hit);
     }
 
+    public List<String> toHumanReadableList() {
+        String coordinatesSeparator = hits.isEmpty() ? "-" : ":";
+        List<String> result = new ArrayList<>();
+
+        for (int i = 1; i < steps.size(); i++) {
+            String coordA = steps.get(i - 1).toString();
+            String coordB = steps.get(i).toString();
+
+            result.add(coordA + coordinatesSeparator + coordB);
+        }
+        return result;
+    }
+
     public String toString() {
         return "Movement(steps=" + this.steps.stream().map(Objects::toString).collect(Collectors.joining("\n\t", "\n\t", "\n\t")) + ")";
     }
