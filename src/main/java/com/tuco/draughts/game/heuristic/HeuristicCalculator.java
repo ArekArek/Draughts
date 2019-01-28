@@ -9,17 +9,17 @@ import java.util.function.BiFunction;
 
 public class HeuristicCalculator {
 
-    private static final double PAWN_VALUE = 1;
-    private static final double KING_VALUE = 2;
-    private static final double SAFE_FACTOR = 0.05;
-    private static final double DISTANCE_FACTOR = -0.02;
-    private static final double FIRST_LINE_VALUE = 0.05;
-    private static final double DEFENDER_KING_VALUE = 0.05;
-    private static final double KING_MAIN_DIAGONAL = 0.05;
-    private static final double TRIANGLE_VALUE = 0.05;
-    private static final double OREO_VALUE = 0.04;
-    private static final double BRIDGE_VALUE = 0.03;
-    private static final double DOG_VALUE = 0.03;
+    private static final double PAWN_VALUE = 1.0;
+    private static final double KING_VALUE = 2.2;
+    private static final double SAFE_FACTOR = 0.14;
+    private static final double DISTANCE_FACTOR = -0.1;
+    private static final double FIRST_LINE_VALUE = 0.4;
+    private static final double DEFENDER_KING_VALUE = 0.1;
+    private static final double KING_MAIN_DIAGONAL = 0.1;
+    private static final double TRIANGLE_VALUE = 0.0;
+    private static final double OREO_VALUE = 2.0;
+    private static final double BRIDGE_VALUE = 1.0;
+    private static final double DOG_VALUE = 2.0;
 
     private final List<BiFunction<Board, Coordinate, Double>> multipleMethods = new ArrayList<>();
     private final List<BiFunction<Board, Boolean, Double>> singleMethods = new ArrayList<>();
